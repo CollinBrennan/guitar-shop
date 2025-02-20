@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { createFileRoute } from '@tanstack/react-router'
+import GuitarBuildForm from '../guitar-build-form'
 
 export const Route = createFileRoute('/')({
   component: HomeComponent,
@@ -7,8 +8,11 @@ export const Route = createFileRoute('/')({
 
 function HomeComponent() {
   return (
-    <div className="p-2">
-      <h3>Welcome Home!</h3>
+    <div className="flex">
+      <div className="flex-1 h-screen bg-red-100"></div>
+      <div className="px-4">
+        <GuitarBuildForm />
+      </div>
     </div>
   )
 }
