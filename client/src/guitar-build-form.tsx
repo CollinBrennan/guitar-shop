@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useForm, UseFormRegisterReturn } from 'react-hook-form'
 
 type Inputs = {
@@ -41,6 +42,15 @@ const fretboardWoodOptions: Option[] = [
 ]
 
 export default function GuitarBuildForm() {
+  useEffect(() => {
+    async function getThing() {
+      const thing = await fetch('http://localhost:3000/api')
+      const json = await thing.json()
+      console.log(json)
+    }
+
+    getThing()
+  })
   const form = useForm<Inputs>({
     defaultValues: {
       color: 'black',
