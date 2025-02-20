@@ -3,4 +3,6 @@
 
 @theme {
   --font-sans: Roboto, sans;
+
+  --color-muted: oklch(0.87 0 0);
 }

@@ -8,11 +8,9 @@ export const Route = createFileRoute('/')({
 
 function HomeComponent() {
   return (
-    <div className="flex">
-      <div className="flex-1 h-screen bg-red-100"></div>
-      <div className="px-4">
-        <GuitarBuildForm />
-      </div>
+    <div className="flex h-full overflow-hidden">
+      <div className="flex-1 bg-red-100"></div>
+      <GuitarBuildForm />
     </div>
   )
 }
