@@ -1,5 +1,6 @@
 import express from 'express'
 import cors from 'cors'
+import productRouter from './routes/product.ts'
 
 const app = express()
 
@@ -9,9 +10,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 
-app.get('/api', (req, res) => {
-  res.json({ fruits: ['apple', 'banana'] })
-})
+app.use('/api/product', productRouter)
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000')
