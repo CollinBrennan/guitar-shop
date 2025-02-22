@@ -1,6 +1,7 @@
 import express from 'express'
 import Stripe from 'stripe'
 import dotenv from 'dotenv'
+import { type ProductData } from '../../types.ts'
 
 dotenv.config()
 
@@ -14,7 +15,7 @@ productRouter.get('/', async (req, res) => {
     expand: ['data.default_price'],
   })
 
-  const productData = products.data.map((product) => {
+  const productData: ProductData[] = products.data.map((product) => {
     const price = product.default_price as Stripe.Price
     return {
       id: product.id,
