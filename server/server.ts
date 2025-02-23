@@ -1,6 +1,9 @@
 import express from 'express'
 import cors from 'cors'
 import productRouter from './routes/product.route.ts'
+import { ExpressAuth } from '@auth/express'
+import morgan from 'morgan'
+import { authConfig } from './lib/auth.ts'
 
 const app = express()
 
@@ -10,10 +13,13 @@ const corsOptions = {
 
 const apiRouter = express.Router()
 
+// middleware
+app.use(morgan('tiny'))
 app.use(cors(corsOptions))
 app.use(express.json())
 
 // set up api routes
+apiRouter.use('/auth/*', ExpressAuth(authConfig))
 apiRouter.use('/product', productRouter)
 
 app.use('/api', apiRouter)

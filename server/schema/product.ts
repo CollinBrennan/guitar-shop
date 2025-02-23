@@ -1,17 +1,19 @@
 import { z } from 'zod'
+import { Color } from '@prisma/client'
 
-const variation = z.object({
+const productItemSchema = z.object({
+  sku: z.string(),
   name: z.string(),
   price: z.number().int(),
-  color: z.string().optional(),
-  image: z.string().optional(),
+  imageUrl: z.string().optional(),
+  color: z.nativeEnum(Color).optional(),
 })
 
 export const insertProductSchema = z.object({
   name: z.string(),
-  slug: z.string(),
   price: z.number().int(),
   description: z.string(),
-  imageUrl: z.string(),
-  variations: z.array(variation).optional(),
+  slug: z.string(),
+  imageUrl: z.string().optional(),
+  items: z.array(productItemSchema).min(1),
 })

@@ -1,31 +1,55 @@
+import { Color } from '@prisma/client'
 import prisma from './prisma.ts'
 
 async function seed() {
-  prisma.product.createMany({
-    data: [
-      {
-        name: 'Guitar Picks - Medium',
-        slug: 'guitar-picks-medium',
-        price: 1000,
-        description: 'Cool awesome guitar picks!',
-        imageUrl: 'https://i.imgur.com/CqXC21j.jpeg',
-        variations: [
-          { name: '12 Pack', price: 1000 },
-          { name: '24 Pack', price: 1800 },
+  await prisma.product.create({
+    data: {
+      name: 'Guitar Picks - Medium',
+      price: 1000,
+      description: 'Cool amazing guitar picks!.',
+      slug: 'guitar-picks-medium',
+      imageUrl: 'https://i.imgur.com/HtK3ioz.jpeg',
+      items: {
+        create: [
+          {
+            sku: 'GPK-M-12',
+            name: '12 Pack',
+            price: 1000,
+          },
+          {
+            sku: 'GPK-M-24',
+            name: '24 Pack',
+            price: 1800,
+          },
         ],
       },
-      {
-        name: 'Instrument Cable',
-        slug: 'instrument-cable',
-        price: 1500,
-        description: 'Cool awesome instrument cable!',
-        imageUrl: 'https://i.imgur.com/CqXC21j.jpeg',
-        variations: [
-          { name: 'Black', color: '#000000', price: 1000 },
-          { name: 'White', color: '#FFFFFF', price: 1000 },
+    },
+  })
+
+  await prisma.product.create({
+    data: {
+      name: 'Instrument Cable',
+      price: 1500,
+      description: 'Cool amazing instrument cable!.',
+      slug: 'instrument-cable',
+      imageUrl: 'https://i.imgur.com/jFztfPR.jpeg',
+      items: {
+        create: [
+          {
+            sku: 'ICBL-10-BLK',
+            name: 'Black',
+            price: 1000,
+            color: Color.black,
+          },
+          {
+            sku: 'ICBL-10-WHT',
+            name: 'White',
+            price: 1000,
+            color: Color.white,
+          },
         ],
       },
-    ],
+    },
   })
 
   console.log('Database seeded.')
