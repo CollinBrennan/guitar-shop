@@ -1,11 +1,8 @@
 import express from 'express'
-import dotenv from 'dotenv'
-import { insertProductSchema } from '../schema/product.ts'
+import { createProductSchema } from '../schema/product.ts'
 import prisma from '../lib/prisma.ts'
 import { authAdmin } from '../lib/middleware.ts'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
-
-dotenv.config()
 
 const productRouter = express.Router()
 
@@ -15,7 +12,7 @@ productRouter.get('/', async (req, res) => {
 })
 
 productRouter.post('/', authAdmin, async (req, res) => {
-  const parsed = insertProductSchema.safeParse(req.body)
+  const parsed = createProductSchema.safeParse(req.body)
 
   if (!parsed.success) {
     res.status(400).json({
@@ -46,7 +43,7 @@ productRouter.post('/', authAdmin, async (req, res) => {
     }
   }
 
-  res.status(500)
+  res.status(500).json({ message: 'Internal server error' })
 })
 
 export default productRouter
