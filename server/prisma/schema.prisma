@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+type Variation {
+  name     String
+  price    Int
+  imageUrl String?
+  color    String?
+}
+
+model Product {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  slug        String
+  price       Int
+  description String
+  imageUrl    String
+  variations  Variation[]
+}
