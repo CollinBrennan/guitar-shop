@@ -54,7 +54,7 @@ function lineItemsFromCart(cart: Cart, items: ItemData[]) {
       currency: 'usd',
       product_data: {
         description: item.product.description,
-        name: item.product.name + ' - ' + item.name,
+        name: item.name,
         images: item.product.imageUrl ? [item.product.imageUrl] : [],
       },
     },

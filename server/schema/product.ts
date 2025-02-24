@@ -1,12 +1,26 @@
 import { z } from 'zod'
-import { Color } from '@prisma/client'
+
+const customOptionChoiceSchema = z.object({
+  name: z.string(),
+  value: z.string(),
+  color: z.string().optional(),
+  surcharge: z.number().int().nonnegative(),
+})
+
+const customOptionSchema = z.object({
+  name: z.string(),
+  value: z.string(),
+  choices: z.array(customOptionChoiceSchema),
+})
 
 const productItemSchema = z.object({
   sku: z.string(),
   name: z.string(),
   price: z.number().int().positive(),
   imageUrl: z.string().optional(),
-  color: z.nativeEnum(Color).optional(),
+  color: z.string().optional(),
+  isCustom: z.boolean(),
+  customOptions: z.array(customOptionSchema).optional(),
 })
 
 export const createProductSchema = z.object({
