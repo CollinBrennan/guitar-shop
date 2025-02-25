@@ -14,13 +14,11 @@ async function seed() {
             sku: 'GPK-M-12',
             name: 'Guitar Picks - Medium - 12 Pack',
             price: 1000,
-            isCustom: false,
           },
           {
             sku: 'GPK-M-24',
             name: 'Guitar Picks - Medium - 24 Pack',
             price: 1800,
-            isCustom: false,
           },
         ],
       },
@@ -41,14 +39,12 @@ async function seed() {
             name: 'Instrument Cable - Black',
             price: 1000,
             color: '#000000',
-            isCustom: false,
           },
           {
             sku: 'ICBL-10-WHT',
             name: 'Instrument Cable - White',
             price: 1000,
             color: '#FFFFFF',
-            isCustom: false,
           },
         ],
       },
@@ -68,39 +64,26 @@ async function seed() {
             sku: 'GTR-CSTM',
             name: 'Custom Guitar',
             price: 500,
-            isCustom: true,
-            customOptions: [
-              {
+            customOptions: {
+              bodyWood: {
                 name: 'Body Wood',
-                value: 'body-wood',
-                choices: [
-                  {
-                    name: 'Alder',
-                    value: 'alder',
-                    color: '#eab37a',
-                    surcharge: 0,
-                  },
-                  {
+                options: {
+                  alder: { name: 'Alder', color: '#eab37a', surcharge: 0 },
+                  mahogany: {
                     name: 'Mahogany',
-                    value: 'mahogany',
-                    color: '#6b2919',
-                    surcharge: 200,
-                  },
-                ],
-              },
-              {
-                name: 'Frets',
-                value: 'frets',
-                choices: [
-                  { name: 'Standard', value: 'standard', surcharge: 0 },
-                  {
-                    name: 'Stainless Steel',
-                    value: 'stainless-steel',
+                    color: '#7a2c20',
                     surcharge: 0,
                   },
-                ],
+                },
               },
-            ],
+              frets: {
+                name: 'Frets',
+                options: {
+                  standard: { name: 'Standard', surcharge: 0 },
+                  stainlessSteel: { name: 'Stainless Steel', surcharge: 0 },
+                },
+              },
+            },
           },
         ],
       },

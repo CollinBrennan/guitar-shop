@@ -1,26 +1,27 @@
 import { z } from 'zod'
 
-const customOptionChoiceSchema = z.object({
-  name: z.string(),
-  value: z.string(),
-  color: z.string().optional(),
-  surcharge: z.number().int().nonnegative(),
-})
+export const createCustomOptionSchema = z.record(
+  z.string(),
+  z.object({
+    name: z.string(),
+    options: z.record(
+      z.string(),
+      z.object({
+        name: z.string(),
+        color: z.string().optional(),
+        surcharge: z.number().int().nonnegative(),
+      })
+    ),
+  })
+)
 
-const customOptionSchema = z.object({
-  name: z.string(),
-  value: z.string(),
-  choices: z.array(customOptionChoiceSchema),
-})
-
-const productItemSchema = z.object({
+const createProductItemSchema = z.object({
   sku: z.string(),
   name: z.string(),
   price: z.number().int().positive(),
   imageUrl: z.string().optional(),
   color: z.string().optional(),
-  isCustom: z.boolean(),
-  customOptions: z.array(customOptionSchema).optional(),
+  customOptions: createCustomOptionSchema.optional(),
 })
 
 export const createProductSchema = z.object({
@@ -29,5 +30,5 @@ export const createProductSchema = z.object({
   description: z.string(),
   slug: z.string(),
   imageUrl: z.string().optional(),
-  items: z.array(productItemSchema).min(1),
+  items: z.array(createProductItemSchema).min(1),
 })
