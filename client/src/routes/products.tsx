@@ -1,34 +1,23 @@
-import { useEffect, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { ProductData } from '../../../types'
 import { centsToDollars } from '../lib/helpers'
-
+import { trpc } from '../lib/trpc'
+import { useQuery } from '@tanstack/react-query'
 export const Route = createFileRoute('/products')({
   component: AboutComponent,
 })
 
 function AboutComponent() {
-  const [products, setProducts] = useState<ProductData[]>([])
-
-  useEffect(() => {
-    async function fetchProducts() {
-      const res = await fetch('/api/product')
-      const json = await res.json()
-      setProducts(json.products)
-    }
-
-    fetchProducts()
-  })
+  const productQuery = useQuery(trpc.product.list.queryOptions())
 
   return (
     <main className="px-16">
       <section>
         <h1 className="font-bold text-2xl">Products</h1>
-        <div className="grid grid-cols-3 bg-pink-100">
-          {products.map((product) => (
+        <div className="grid grid-cols-3">
+          {productQuery.data?.map((product) => (
             <div>
               <img
-                src={product.images[0]}
+                src={product.imageUrl || ''}
                 alt={product.name}
                 className="size-48 object-contain"
               />
