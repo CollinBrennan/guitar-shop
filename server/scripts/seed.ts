@@ -64,7 +64,7 @@ async function seed() {
             sku: 'GTR-CSTM',
             name: 'Custom Guitar',
             price: 500,
-            customOptions: {
+            optionFields: {
               bodyWood: {
                 name: 'Body Wood',
                 options: {
