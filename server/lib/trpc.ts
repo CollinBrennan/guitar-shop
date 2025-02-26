@@ -1,6 +1,6 @@
 import { getSession } from '@auth/express'
 import { initTRPC, TRPCError } from '@trpc/server'
-import { authConfig } from './lib/auth.ts'
+import { authConfig } from './auth.ts'
 import { Role } from '@prisma/client'
 import type { CreateExpressContextOptions } from '@trpc/server/adapters/express'
 

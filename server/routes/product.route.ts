@@ -1,10 +1,10 @@
 import { createProductSchema } from '../schema/product.schema.ts'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { createProduct, getProducts } from '../actions/product.actions.ts'
-import { adminProcedure, procedure, router } from '../trpc.ts'
+import { adminProcedure, procedure, router } from '../lib/trpc.ts'
 import { TRPCError } from '@trpc/server'
 
-export const productRouter = router({
+const productRouter = router({
   list: procedure.query(async () => {
     const products = await getProducts()
     return products

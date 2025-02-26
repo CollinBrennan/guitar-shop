@@ -2,7 +2,7 @@ import { cartSchema } from '../schema/checkout.schema.ts'
 import stripe from '../lib/stripe.ts'
 import { getItemsFromSkus } from '../actions/item.actions.ts'
 import { lineItemsFromCart } from '../lib/helpers.ts'
-import { procedure, router } from '../trpc.ts'
+import { procedure, router } from '../lib/trpc.ts'
 import { TRPCError } from '@trpc/server'
 
 const checkoutRouter = router({
@@ -26,7 +26,7 @@ const checkoutRouter = router({
       if (error instanceof Error)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Invalid cart items',
+          message: error.message,
         })
     }
   }),
