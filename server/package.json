@@ -14,6 +14,7 @@
     "@auth/express": "^0.8.4",
     "@auth/prisma-adapter": "^2.7.4",
     "@prisma/client": "^6.4.1",
+    "@trpc/server": "^11.0.0-rc.808",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",

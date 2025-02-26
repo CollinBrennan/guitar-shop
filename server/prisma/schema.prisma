@@ -7,26 +7,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model ProductItem {
-  id            String  @id @default(auto()) @map("_id") @db.ObjectId
-  sku           String  @unique
-  name          String
-  price         Int
-  imageUrl      String?
-  color         String?
-  customOptions Json?
-  productId     String  @db.ObjectId
-  product       Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+model Item {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  sku          String  @unique
+  name         String
+  price        Int
+  imageUrl     String?
+  color        String?
+  optionFields Json?
+  productId    String  @db.ObjectId
+  product      Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Product {
-  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   price       Int
   description String
-  slug        String        @unique
+  slug        String  @unique
   imageUrl    String?
-  items       ProductItem[]
+  items       Item[]
 }
 
 enum Role {
