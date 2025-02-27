@@ -19,6 +19,7 @@ export const createItemSchema = z.object({
   sku: z.string(),
   name: z.string(),
   price: z.number().int().positive(),
+  label: z.string(),
   imageUrl: z.string().optional(),
   color: z.string().optional(),
   optionFields: createOptionFieldsSchema.optional(),

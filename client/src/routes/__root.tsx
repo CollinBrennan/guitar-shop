@@ -13,7 +13,7 @@ function RootComponent() {
       <div className="h-screen flex flex-col">
         <Navbar />
         <Outlet />
-        {/* <TanStackRouterDevtools position="bottom-right" /> */}
+        <TanStackRouterDevtools position="bottom-right" />
       </div>
     </QueryClientProvider>
   )

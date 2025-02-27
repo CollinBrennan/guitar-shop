@@ -42,15 +42,6 @@ const fretboardWoodOptions: Option[] = [
 ]
 
 export default function GuitarBuildForm() {
-  useEffect(() => {
-    async function getThing() {
-      const thing = await fetch('/api')
-      const json = await thing.json()
-      console.log(json)
-    }
-
-    getThing()
-  })
   const form = useForm<Inputs>({
     defaultValues: {
       color: 'black',

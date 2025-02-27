@@ -12,6 +12,7 @@ model Item {
   sku          String  @unique
   name         String
   price        Int
+  label        String
   imageUrl     String?
   color        String?
   optionFields Json?

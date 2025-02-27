@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { centsToDollars } from '../lib/helpers'
 import { trpc } from '../lib/trpc'
 import { useQuery } from '@tanstack/react-query'
@@ -15,7 +15,7 @@ function AboutComponent() {
         <h1 className="font-bold text-2xl">Products</h1>
         <div className="grid grid-cols-3">
           {productQuery.data?.map((product) => (
-            <div>
+            <Link to="/product/$slug" params={{ slug: product.slug }}>
               <img
                 src={product.imageUrl || ''}
                 alt={product.name}
@@ -26,7 +26,7 @@ function AboutComponent() {
                 {product.price && centsToDollars(product.price)}
               </p>
               <p>{product.id}</p>
-            </div>
+            </Link>
           ))}
         </div>
       </section>

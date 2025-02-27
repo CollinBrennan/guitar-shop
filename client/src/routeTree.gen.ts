@@ -14,6 +14,8 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as ProductsImport } from './routes/products'
 import { Route as CartImport } from './routes/cart'
 import { Route as IndexImport } from './routes/index'
+import { Route as ProductCustomGuitarImport } from './routes/product/custom-guitar'
+import { Route as ProductSlugImport } from './routes/product/$slug'
 
 // Create/Update Routes
 
@@ -32,6 +34,18 @@ const CartRoute = CartImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProductCustomGuitarRoute = ProductCustomGuitarImport.update({
+  id: '/product/custom-guitar',
+  path: '/product/custom-guitar',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProductSlugRoute = ProductSlugImport.update({
+  id: '/product/$slug',
+  path: '/product/$slug',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -60,6 +74,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsImport
       parentRoute: typeof rootRoute
     }
+    '/product/$slug': {
+      id: '/product/$slug'
+      path: '/product/$slug'
+      fullPath: '/product/$slug'
+      preLoaderRoute: typeof ProductSlugImport
+      parentRoute: typeof rootRoute
+    }
+    '/product/custom-guitar': {
+      id: '/product/custom-guitar'
+      path: '/product/custom-guitar'
+      fullPath: '/product/custom-guitar'
+      preLoaderRoute: typeof ProductCustomGuitarImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -69,12 +97,16 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
   '/products': typeof ProductsRoute
+  '/product/$slug': typeof ProductSlugRoute
+  '/product/custom-guitar': typeof ProductCustomGuitarRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
   '/products': typeof ProductsRoute
+  '/product/$slug': typeof ProductSlugRoute
+  '/product/custom-guitar': typeof ProductCustomGuitarRoute
 }
 
 export interface FileRoutesById {
@@ -82,14 +114,27 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
   '/products': typeof ProductsRoute
+  '/product/$slug': typeof ProductSlugRoute
+  '/product/custom-guitar': typeof ProductCustomGuitarRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cart' | '/products'
+  fullPaths:
+    | '/'
+    | '/cart'
+    | '/products'
+    | '/product/$slug'
+    | '/product/custom-guitar'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cart' | '/products'
-  id: '__root__' | '/' | '/cart' | '/products'
+  to: '/' | '/cart' | '/products' | '/product/$slug' | '/product/custom-guitar'
+  id:
+    | '__root__'
+    | '/'
+    | '/cart'
+    | '/products'
+    | '/product/$slug'
+    | '/product/custom-guitar'
   fileRoutesById: FileRoutesById
 }
 
@@ -97,12 +142,16 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CartRoute: typeof CartRoute
   ProductsRoute: typeof ProductsRoute
+  ProductSlugRoute: typeof ProductSlugRoute
+  ProductCustomGuitarRoute: typeof ProductCustomGuitarRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CartRoute: CartRoute,
   ProductsRoute: ProductsRoute,
+  ProductSlugRoute: ProductSlugRoute,
+  ProductCustomGuitarRoute: ProductCustomGuitarRoute,
 }
 
 export const routeTree = rootRoute
@@ -117,7 +166,9 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/cart",
-        "/products"
+        "/products",
+        "/product/$slug",
+        "/product/custom-guitar"
       ]
     },
     "/": {
@@ -128,6 +179,12 @@ export const routeTree = rootRoute
     },
     "/products": {
       "filePath": "products.tsx"
+    },
+    "/product/$slug": {
+      "filePath": "product/$slug.tsx"
+    },
+    "/product/custom-guitar": {
+      "filePath": "product/custom-guitar.tsx"
     }
   }
 }
