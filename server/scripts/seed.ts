@@ -1,93 +1,168 @@
+import { createProduct } from '../actions/product.actions.ts'
 import prisma from '../lib/prisma.ts'
 
 async function seed() {
-  await prisma.product.create({
-    data: {
-      name: 'Guitar Picks - Medium',
-      price: 1000,
-      description: 'Cool amazing guitar picks!.',
-      slug: 'guitar-picks-medium',
-      imageUrl: 'https://i.imgur.com/HtK3ioz.jpeg',
-      items: {
-        create: [
-          {
-            sku: 'GPK-M-12',
-            name: 'Guitar Picks - Medium - 12 Pack',
-            price: 1000,
-          },
-          {
-            sku: 'GPK-M-24',
-            name: 'Guitar Picks - Medium - 24 Pack',
-            price: 1800,
-          },
-        ],
+  await createProduct({
+    name: 'Guitar Picks',
+    price: 1000,
+    description: 'Cool amazing guitar picks!.',
+    slug: 'guitar-picks',
+    imageUrl: 'https://i.imgur.com/HtK3ioz.jpeg',
+    variantFields: {
+      color: {
+        black: {
+          name: 'Black',
+          color: '#000000',
+        },
+        white: {
+          name: 'White',
+          color: '#FFFFFF',
+        },
+      },
+      thickness: {
+        thin: {
+          name: 'Thin',
+        },
+        heavy: {
+          name: 'Heavy',
+        },
+      },
+      size: {
+        '12': {
+          name: '12 Pack',
+        },
+        '24': {
+          name: '24 Pack',
+        },
       },
     },
+    items: [
+      {
+        sku: 'GPK-M-BLK-12',
+        price: 1000,
+        variant: {
+          color: 'black',
+          thickness: 'medium',
+          size: '12',
+        },
+      },
+      {
+        sku: 'GPK-M-BLK-24',
+        price: 1800,
+        variant: {
+          color: 'black',
+          thickness: 'medium',
+          size: '24',
+        },
+      },
+      {
+        sku: 'GPK-H-BLK-12',
+        price: 1000,
+        variant: {
+          color: 'black',
+          thickness: 'heavy',
+          size: '12',
+        },
+      },
+      {
+        sku: 'GPK-H-BLK-24',
+        price: 1800,
+        variant: {
+          color: 'black',
+          thickness: 'heavy',
+          size: '24',
+        },
+      },
+      {
+        sku: 'GPK-H-WHT-12',
+        price: 1000,
+        variant: {
+          color: 'white',
+          thickness: 'heavy',
+          size: '12',
+        },
+      },
+      {
+        sku: 'GPK-H-WHT-24',
+        price: 1800,
+        variant: {
+          color: 'white',
+          thickness: 'heavy',
+          size: '24',
+        },
+      },
+    ],
   })
 
-  await prisma.product.create({
-    data: {
-      name: 'Instrument Cable',
-      price: 1500,
-      description: 'Cool amazing instrument cable!.',
-      slug: 'instrument-cable',
-      imageUrl: 'https://i.imgur.com/jFztfPR.jpeg',
-      items: {
-        create: [
-          {
-            sku: 'ICBL-10-BLK',
-            name: 'Instrument Cable - Black',
-            price: 1000,
-            color: '#000000',
-          },
-          {
-            sku: 'ICBL-10-WHT',
-            name: 'Instrument Cable - White',
-            price: 1000,
-            color: '#FFFFFF',
-          },
-        ],
+  await createProduct({
+    name: 'Instrument Cable',
+    price: 1500,
+    description: 'Cool amazing instrument cable!',
+    slug: 'instrument-cable',
+    imageUrl: 'https://i.imgur.com/jFztfPR.jpeg',
+    variantFields: {
+      color: {
+        black: {
+          name: 'Black',
+          color: '#000000',
+        },
+        white: {
+          name: 'White',
+          color: '#FFFFFF',
+        },
       },
     },
+    items: [
+      {
+        sku: 'ICBL-BLK',
+        price: 1500,
+        variant: {
+          color: 'black',
+        },
+      },
+      {
+        sku: 'ICBL-WHT',
+        price: 1500,
+        variant: {
+          color: 'white',
+        },
+      },
+    ],
   })
 
-  await prisma.product.create({
-    data: {
-      name: 'Custom Guitar',
-      price: 500,
-      description: 'Custom guitarrrrrr!.',
-      slug: 'custom-guitar',
-      imageUrl: 'https://i.imgur.com/dLVWfHZ.png',
-      items: {
-        create: [
-          {
-            sku: 'GTR-CSTM',
-            name: 'Custom Guitar',
-            price: 500,
-            optionFields: {
-              bodyWood: {
-                name: 'Body Wood',
-                options: {
-                  alder: { name: 'Alder', color: '#eab37a', surcharge: 0 },
-                  mahogany: {
-                    name: 'Mahogany',
-                    color: '#7a2c20',
-                    surcharge: 0,
-                  },
-                },
-              },
-              frets: {
-                name: 'Frets',
-                options: {
-                  standard: { name: 'Standard', surcharge: 0 },
-                  stainlessSteel: { name: 'Stainless Steel', surcharge: 0 },
-                },
+  await createProduct({
+    name: 'Custom Guitar',
+    price: 50000,
+    description: 'Your very own custom guitar!',
+    slug: 'custom-guitar',
+    imageUrl: 'https://i.imgur.com/dLVWfHZ.png',
+    items: [
+      {
+        sku: 'GTR-CSTM',
+        price: 50000,
+        variant: {},
+        optionFields: {
+          bodyWood: {
+            name: 'Body Wood',
+            options: {
+              alder: { name: 'Alder', color: '#eab37a', fee: 0 },
+              mahogany: {
+                name: 'Mahogany',
+                color: '#7a2c20',
+                fee: 10000,
               },
             },
           },
-        ],
+          frets: {
+            name: 'Frets',
+            options: {
+              standard: { name: 'Standard', fee: 0 },
+              stainlessSteel: { name: 'Stainless Steel', fee: 5000 },
+            },
+          },
+        },
       },
-    },
+    ],
   })
 
   console.log('Database seeded.')

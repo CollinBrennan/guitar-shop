@@ -1,11 +1,11 @@
 import { z } from 'zod'
 
 export const createOptionFieldsSchema = z.record(
-  z.string(), // option field (ex. size)
+  z.string(), // field value (ex. 'wood')
   z.object({
     name: z.string(),
     options: z.record(
-      z.string(), // option (ex. medium)
+      z.string(), // option value (ex. 'alder')
       z.object({
         name: z.string(),
         color: z.string().optional(),
@@ -15,13 +15,16 @@ export const createOptionFieldsSchema = z.record(
   })
 )
 
+const variantSchema = z.record(
+  z.string(), // field value (ex. 'size')
+  z.string() // option value (ex. 'medium')
+)
+
 export const createItemSchema = z.object({
   sku: z.string(),
-  name: z.string(),
+  variant: variantSchema,
   price: z.number().int().positive(),
-  label: z.string(),
   imageUrl: z.string().optional(),
-  color: z.string().optional(),
   optionFields: createOptionFieldsSchema.optional(),
 })
 

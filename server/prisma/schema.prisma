@@ -10,24 +10,23 @@ datasource db {
 model Item {
   id           String  @id @default(auto()) @map("_id") @db.ObjectId
   sku          String  @unique
-  name         String
   price        Int
-  label        String
+  variant      Json    @unique
   imageUrl     String?
-  color        String?
   optionFields Json?
   productId    String  @db.ObjectId
   product      Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Product {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  price       Int
-  description String
-  slug        String  @unique
-  imageUrl    String?
-  items       Item[]
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  price         Int
+  description   String
+  slug          String  @unique
+  imageUrl      String?
+  variantFields Json?
+  items         Item[]
 }
 
 enum Role {
