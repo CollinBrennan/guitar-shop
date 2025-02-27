@@ -11,4 +11,5 @@ export const cartSchema = z.record(
 )
 
 export type Choices = z.infer<typeof choices>
+
 export type Cart = z.infer<typeof cartSchema>

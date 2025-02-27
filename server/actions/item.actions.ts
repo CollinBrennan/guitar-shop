@@ -1,9 +1,12 @@
-import type { Product, Item } from '@prisma/client'
 import prisma from '../lib/prisma.ts'
+import type { Item } from '../schema/item.schema.ts'
+import type { Product } from '../schema/product.schema.ts'
 
-export type ProductItem = { product: Product } & Item
+export type ItemWithProduct = { product: Product } & Item
 
-export async function getItemsFromSkus(skus: string[]): Promise<ProductItem[]> {
+export async function getItemsFromSkus(
+  skus: string[]
+): Promise<ItemWithProduct[]> {
   const items = await prisma.item.findMany({
     where: {
       sku: {
@@ -15,5 +18,5 @@ export async function getItemsFromSkus(skus: string[]): Promise<ProductItem[]> {
     },
   })
 
-  return items
+  return items as ItemWithProduct[]
 }

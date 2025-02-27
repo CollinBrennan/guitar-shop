@@ -1,6 +1,7 @@
 import { z } from 'zod'
+import type { Item as RawItem } from '@prisma/client'
 
-export const createOptionFieldsSchema = z.record(
+const optionFieldsSchema = z.record(
   z.string(), // field value (ex. 'wood')
   z.object({
     name: z.string(),
@@ -15,7 +16,7 @@ export const createOptionFieldsSchema = z.record(
   })
 )
 
-export const variantSchema = z.record(
+const variantSchema = z.record(
   z.string(), // field value (ex. 'size')
   z.string() // option value (ex. 'medium')
 )
@@ -25,9 +26,12 @@ export const createItemSchema = z.object({
   variant: variantSchema,
   price: z.number().int().positive(),
   imageUrl: z.string().optional(),
-  optionFields: createOptionFieldsSchema.optional(),
+  optionFields: optionFieldsSchema.optional(),
 })
 
-export type OptionFieldsData = z.infer<typeof createOptionFieldsSchema>
-export type Variant = z.infer<typeof variantSchema>
-export type ItemData = z.infer<typeof createItemSchema>
+export type CreateItemData = z.infer<typeof createItemSchema>
+
+export type Item = Omit<RawItem, 'optionFields' | 'variant'> & {
+  variant: z.infer<typeof variantSchema>
+  optionFields: z.infer<typeof optionFieldsSchema> | null
+}

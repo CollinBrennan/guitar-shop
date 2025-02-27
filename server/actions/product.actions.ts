@@ -1,18 +1,8 @@
-import type { Item as RawItem, Product as RawProduct } from '@prisma/client'
 import prisma from '../lib/prisma.ts'
-import type { OptionFieldsData, Variant } from '../schema/item.schema.ts'
-import type { ProductData, VariantFields } from '../schema/product.schema.ts'
+import type { Item } from '../schema/item.schema.ts'
+import type { Product, CreateProductData } from '../schema/product.schema.ts'
 
 // needed to typecast raw json fields
-type Item = Omit<RawItem, 'optionFields' | 'variant'> & {
-  variant: Variant
-  optionFields: OptionFieldsData | null
-}
-
-type Product = Omit<RawProduct, 'variantFields'> & {
-  variantFields: VariantFields | null
-}
-
 type ProductWithItems = Omit<Product, 'items'> & {
   items: Item[]
 }
@@ -37,7 +27,7 @@ export async function getProductWithItemsBySlug(
 }
 
 export async function createProduct(
-  productData: ProductData
+  productData: CreateProductData
 ): Promise<Product> {
   const product = await prisma.product.create({
     data: {
