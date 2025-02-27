@@ -24,29 +24,38 @@ async function seed() {
     imageUrl: 'https://i.imgur.com/HtK3ioz.jpeg',
     variantFields: {
       color: {
-        black: {
-          name: 'Black',
-          color: '#000000',
-        },
-        white: {
-          name: 'White',
-          color: '#FFFFFF',
+        name: 'Color',
+        options: {
+          black: {
+            name: 'Black',
+            color: '#000000',
+          },
+          white: {
+            name: 'White',
+            color: '#FFFFFF',
+          },
         },
       },
       thickness: {
-        thin: {
-          name: 'Thin',
-        },
-        heavy: {
-          name: 'Heavy',
+        name: 'Thickness',
+        options: {
+          thin: {
+            name: 'Thin',
+          },
+          heavy: {
+            name: 'Heavy',
+          },
         },
       },
       size: {
-        '12': {
-          name: '12 Pack',
-        },
-        '24': {
-          name: '24 Pack',
+        name: 'Size',
+        options: {
+          '12': {
+            name: '12 Pack',
+          },
+          '24': {
+            name: '24 Pack',
+          },
         },
       },
     },
@@ -116,13 +125,16 @@ async function seed() {
     imageUrl: 'https://i.imgur.com/jFztfPR.jpeg',
     variantFields: {
       color: {
-        black: {
-          name: 'Black',
-          color: '#000000',
-        },
-        white: {
-          name: 'White',
-          color: '#FFFFFF',
+        name: 'Color',
+        options: {
+          black: {
+            name: 'Black',
+            color: '#000000',
+          },
+          white: {
+            name: 'White',
+            color: '#FFFFFF',
+          },
         },
       },
     },

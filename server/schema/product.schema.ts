@@ -4,13 +4,16 @@ import type { Product as RawProduct } from '@prisma/client'
 
 const variantFieldsSchema = z.record(
   z.string(), // field value (ex. 'size')
-  z.record(
-    z.string(), // option value (ex. 'small')
-    z.object({
-      name: z.string(),
-      color: z.string().optional(),
-    })
-  )
+  z.object({
+    name: z.string(),
+    options: z.record(
+      z.string(), // option value (ex. 'small')
+      z.object({
+        name: z.string(),
+        color: z.string().optional(),
+      })
+    ),
+  })
 )
 
 export const createProductSchema = z.object({
