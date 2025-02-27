@@ -15,7 +15,7 @@ export const createOptionFieldsSchema = z.record(
   })
 )
 
-const variantSchema = z.record(
+export const variantSchema = z.record(
   z.string(), // field value (ex. 'size')
   z.string() // option value (ex. 'medium')
 )
@@ -29,4 +29,5 @@ export const createItemSchema = z.object({
 })
 
 export type OptionFieldsData = z.infer<typeof createOptionFieldsSchema>
+export type Variant = z.infer<typeof variantSchema>
 export type ItemData = z.infer<typeof createItemSchema>

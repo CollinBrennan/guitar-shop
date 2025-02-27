@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { createItemSchema } from './item.schema.ts'
 
-const variantFieldsSchema = z.record(
+export const variantFieldsSchema = z.record(
   z.string(), // field value (ex. 'size')
   z.record(
     z.string(), // option value (ex. 'small')
@@ -22,4 +22,5 @@ export const createProductSchema = z.object({
   items: z.array(createItemSchema),
 })
 
+export type VariantFields = z.infer<typeof variantFieldsSchema>
 export type ProductData = z.infer<typeof createProductSchema>
