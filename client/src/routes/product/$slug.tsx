@@ -16,6 +16,9 @@ export const Route = createFileRoute('/product/$slug')({
 
 function RouteComponent() {
   const product = Route.useLoaderData()
+  const variantFields = product.variantFields
+    ? Object.entries(product.variantFields)
+    : null
   return (
     <main className="">
       <section className="px-16 flex w-full gap-8">
@@ -25,32 +28,44 @@ function RouteComponent() {
         <div className="w-1/2">
           <h1 className="font-bold text-2xl">{product.name}</h1>
           <p>{product.description}</p>
-          <div className="flex gap-2">
-            {product.items.map((item) => (
-              <div className="relative flex flex-col">
-                <input
-                  id={item.sku}
-                  type="radio"
-                  name={'item'}
-                  value={item.sku}
-                  className="absolute size-full appearance-none border cursor-pointer border-muted rounded-full checked:border-blue-500 checked:border-2"
-                />
-                <label
-                  htmlFor={item.sku}
-                  className="flex items-center justify-between gap-8 px-2 pr-4 py-2"
-                >
-                  <div className="flex gap-2 items-center">
-                    {item.color && (
-                      <div
-                        className="size-5 rounded-full aspect-square border border-neutral-300"
-                        style={{ backgroundColor: item.color }}
-                      />
+          <div className="flex flex-col gap-4 pt-8">
+            {variantFields &&
+              variantFields.map(([field, fieldData]) => (
+                <form>
+                  <div className="font-bold">{fieldData.name}</div>
+                  <div className="flex gap-2">
+                    {Object.entries(fieldData.options).map(
+                      ([option, optionData]) => (
+                        <div className="relative flex">
+                          <input
+                            id={`${field}-${option}`}
+                            type="radio"
+                            name={field}
+                            value={option}
+                            className="absolute size-full appearance-none  cursor-pointer  rounded-full checked:border-blue-500 checked:border-2"
+                          />
+                          <label
+                            htmlFor={`${field}-${option}`}
+                            className="flex items-center justify-between "
+                          >
+                            {optionData.color ? (
+                              <div
+                                className="size-8 rounded-full aspect-square border border-neutral-300"
+                                title={optionData.name}
+                                style={{ backgroundColor: optionData.color }}
+                              />
+                            ) : (
+                              <div className="text-sm px-4 py-2 rounded-full border border-neutral-300">
+                                {optionData.name}
+                              </div>
+                            )}
+                          </label>
+                        </div>
+                      )
                     )}
-                    <div className="text-sm">{item.label}</div>
                   </div>
-                </label>
-              </div>
-            ))}
+                </form>
+              ))}
           </div>
         </div>
       </section>

@@ -47,7 +47,7 @@ async function seed() {
           },
         },
       },
-      size: {
+      count: {
         name: 'Size',
         options: {
           '12': {
@@ -66,7 +66,7 @@ async function seed() {
         variant: {
           color: 'black',
           thickness: 'medium',
-          size: '12',
+          count: '12',
         },
       },
       {
@@ -75,7 +75,7 @@ async function seed() {
         variant: {
           color: 'black',
           thickness: 'medium',
-          size: '24',
+          count: '24',
         },
       },
       {
@@ -84,7 +84,7 @@ async function seed() {
         variant: {
           color: 'black',
           thickness: 'heavy',
-          size: '12',
+          count: '12',
         },
       },
       {
@@ -93,7 +93,7 @@ async function seed() {
         variant: {
           color: 'black',
           thickness: 'heavy',
-          size: '24',
+          count: '24',
         },
       },
       {
@@ -102,7 +102,7 @@ async function seed() {
         variant: {
           color: 'white',
           thickness: 'heavy',
-          size: '12',
+          count: '12',
         },
       },
       {
@@ -111,7 +111,7 @@ async function seed() {
         variant: {
           color: 'white',
           thickness: 'heavy',
-          size: '24',
+          count: '24',
         },
       },
     ],

@@ -25,7 +25,6 @@ function AboutComponent() {
               <p className="text-muted">
                 {product.price && centsToDollars(product.price)}
               </p>
-              <p>{product.id}</p>
             </Link>
           ))}
         </div>
