@@ -1,7 +1,21 @@
 import { createProduct } from '../actions/product.actions.ts'
-import prisma from '../lib/prisma.ts'
 
 async function seed() {
+  await createProduct({
+    name: 'Guitar Stand',
+    price: 2000,
+    description: 'Guitar stand!',
+    slug: 'guitar-stand',
+    imageUrl: 'https://i.imgur.com/cEcruBa.png',
+    items: [
+      {
+        sku: 'GTRSTAND',
+        price: 2000,
+        variant: {},
+      },
+    ],
+  })
+
   await createProduct({
     name: 'Guitar Picks',
     price: 1000,
