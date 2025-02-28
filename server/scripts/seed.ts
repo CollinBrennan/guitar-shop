@@ -39,8 +39,8 @@ async function seed() {
       thickness: {
         name: 'Thickness',
         options: {
-          thin: {
-            name: 'Thin',
+          medium: {
+            name: 'Medium',
           },
           heavy: {
             name: 'Heavy',
