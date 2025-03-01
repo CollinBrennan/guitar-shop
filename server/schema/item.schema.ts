@@ -31,7 +31,9 @@ export const createItemSchema = z.object({
 
 export type CreateItemData = z.infer<typeof createItemSchema>
 
+export type OptionFields = z.infer<typeof optionFieldsSchema>
+
 export type Item = Omit<RawItem, 'optionFields' | 'variant'> & {
   variant: z.infer<typeof variantSchema>
-  optionFields: z.infer<typeof optionFieldsSchema> | null
+  optionFields: OptionFields | null
 }

@@ -1,8 +1,8 @@
-import type { ProductItem } from '../actions/item.actions.ts'
-import type { Cart, Choices } from '../schema/checkout.schema.ts'
-import type { OptionFieldsData } from '../schema/item.schema.ts'
+import type { ItemWithProduct } from '../actions/item.actions.ts'
+import type { CartItems, Choices } from '../schema/checkout.schema.ts'
+import type { OptionFields } from '../schema/item.schema.ts'
 
-export function lineItemsFromCart(cart: Cart, items: ProductItem[]) {
+export function lineItemsFromCart(cart: CartItems, items: ItemWithProduct[]) {
   const lineItems = items.map((item) => {
     const cartItem = cart[item.sku]
     if (!cartItem) throw new Error('Cart item not found')
@@ -14,7 +14,7 @@ export function lineItemsFromCart(cart: Cart, items: ProductItem[]) {
       price = priceFromCustomOptions(
         item.price,
         cartItem.choices,
-        item.optionFields as OptionFieldsData
+        item.optionFields as OptionFields
       )
     }
 
@@ -24,7 +24,7 @@ export function lineItemsFromCart(cart: Cart, items: ProductItem[]) {
         currency: 'usd',
         product_data: {
           description: item.product.description,
-          name: item.name,
+          name: item.product.name,
           images: item.product.imageUrl ? [item.product.imageUrl] : [],
         },
       },
@@ -38,7 +38,7 @@ export function lineItemsFromCart(cart: Cart, items: ProductItem[]) {
 function priceFromCustomOptions(
   basePrice: number,
   choices: Choices,
-  optionFields: OptionFieldsData
+  optionFields: OptionFields
 ) {
   let price = basePrice
 
