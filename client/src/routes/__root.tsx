@@ -2,6 +2,7 @@ import { Link, Outlet, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from '../lib/trpc'
+import { CartProvider } from '../context/cart'
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -10,11 +11,13 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="h-screen flex flex-col">
-        <Navbar />
-        <Outlet />
-        <TanStackRouterDevtools position="bottom-right" />
-      </div>
+      <CartProvider>
+        <div className="h-screen flex flex-col">
+          <Navbar />
+          <Outlet />
+          <TanStackRouterDevtools position="bottom-right" />
+        </div>
+      </CartProvider>
     </QueryClientProvider>
   )
 }

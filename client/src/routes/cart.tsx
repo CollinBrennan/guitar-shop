@@ -1,9 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useContext } from 'react'
+import { CartContext } from '../context/cart'
 
 export const Route = createFileRoute('/cart')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  return <div>Hello "/cart"!</div>
+  const cart = useContext(CartContext)
+  return <div>{JSON.stringify(cart.cart)}</div>
 }

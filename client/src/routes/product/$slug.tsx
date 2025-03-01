@@ -1,8 +1,9 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import { queryClient, trpc } from '../../lib/trpc'
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { centsToDollars } from '../../lib/helpers'
+import { CartContext } from '../../context/cart'
 
 export const Route = createFileRoute('/product/$slug')({
   component: RouteComponent,
@@ -18,6 +19,7 @@ export const Route = createFileRoute('/product/$slug')({
 })
 
 function RouteComponent() {
+  const cart = useContext(CartContext)
   const product = Route.useLoaderData()
 
   type Item = (typeof product.items)[0]
@@ -26,7 +28,7 @@ function RouteComponent() {
     product.items[0]
   )
   const form = useForm<Record<string, string>>({
-    defaultValues: product.items[0].variant,
+    defaultValues: product.items[0]?.variant,
   })
 
   const items = variantToItemMap(product)
@@ -40,7 +42,9 @@ function RouteComponent() {
     setSelectedItem(items[variant])
   }
 
-  const handleSubmit = form.handleSubmit(() => console.log(selectedItem))
+  const handleSubmit = form.handleSubmit(() => {
+    if (selectedItem) cart.incrementCart(selectedItem.sku)
+  })
 
   return (
     <main className="">
@@ -66,9 +70,9 @@ function RouteComponent() {
                         {fieldData.name + ': '}
                         <span className="font-bold">
                           {
-                            product.variantFields[field].options[
+                            product.variantFields[field]?.options[
                               form.getValues(field)
-                            ].name
+                            ]?.name
                           }
                         </span>
                       </div>
