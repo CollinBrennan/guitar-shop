@@ -167,7 +167,7 @@ async function seed() {
         sku: 'GTR-CSTM',
         price: 50000,
         variant: {},
-        optionFields: {
+        customFields: {
           bodyWood: {
             name: 'Body Wood',
             options: {
@@ -186,6 +186,10 @@ async function seed() {
               stainlessSteel: { name: 'Stainless Steel', fee: 5000 },
             },
           },
+        },
+        customDefaultChoices: {
+          bodyWood: 'alder',
+          frets: 'standard',
         },
       },
     ],

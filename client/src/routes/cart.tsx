@@ -10,7 +10,8 @@ function RouteComponent() {
   const cart = useContext(CartContext)
   return (
     <div>
-      {JSON.stringify(cart.items)}
+      <pre>{JSON.stringify(cart.items, null, 2)}</pre>
+
       <Link to="/checkout">Checkout</Link>
     </div>
   )
