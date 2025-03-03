@@ -7,7 +7,7 @@ export function lineItemsFromCart(cartItems: CartItems, items: ItemsRecord) {
     const sku = skuFromCartItemSku(cartItemSku)
     const item = items[sku]
 
-    if (!item) throw new Error('Invalid cart item')
+    if (!item) throw new Error(`Invalid item SKU: '${sku}'`)
 
     const price = item.customFields
       ? priceFromCustomChoices(
@@ -39,17 +39,17 @@ function priceFromCustomChoices(
   customChoices: CustomChoices,
   customFields: CustomFields
 ) {
-  let price = basePrice
-
-  for (let [field, fieldData] of Object.entries(customFields)) {
+  const entries = Object.entries(customFields)
+  const price = entries.reduce((acc, [field, fieldData]) => {
     const choice = customChoices[field]
-    if (!choice) throw new Error('Invalid custom item choices')
+    if (!choice) throw new Error(`Missing custom item choice: ${field}`)
 
     const option = fieldData.options[choice]
-    if (!option) throw new Error('Invalid custom item options')
+    if (!option)
+      throw new Error(`Invalid custom item choice for '${field}': ${choice}`)
 
-    price += option.fee
-  }
+    return acc + option.fee
+  }, basePrice)
 
   return price
 }
