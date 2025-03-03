@@ -1,12 +1,9 @@
-import type Stripe from 'stripe'
-import type { ItemsRecord, ItemWithProduct } from '../actions/item.actions.ts'
+import type { ItemsRecord } from '../actions/item.actions.ts'
 import type { CartItems } from '../schema/checkout.schema.ts'
 import type { CustomChoices, CustomFields } from '../schema/item.schema.ts'
 
 export function lineItemsFromCart(cartItems: CartItems, items: ItemsRecord) {
-  const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = []
-
-  for (let [cartItemSku, cartItem] of Object.entries(cartItems)) {
+  const lineItems = Object.entries(cartItems).map(([cartItemSku, cartItem]) => {
     const sku = skuFromCartItemSku(cartItemSku)
     const item = items[sku]
 
@@ -20,7 +17,7 @@ export function lineItemsFromCart(cartItems: CartItems, items: ItemsRecord) {
         )
       : item.price
 
-    const lineItem = {
+    return {
       price_data: {
         unit_amount: price,
         currency: 'usd',
@@ -32,9 +29,7 @@ export function lineItemsFromCart(cartItems: CartItems, items: ItemsRecord) {
       },
       quantity: cartItem.quantity,
     }
-
-    lineItems.push(lineItem)
-  }
+  })
 
   return lineItems
 }
