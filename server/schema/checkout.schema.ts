@@ -6,6 +6,7 @@ export const cartItemsSchema = z.record(
   z.object({
     quantity: z.number().int().positive().max(99),
     customChoices: customChoicesSchema,
+    description: z.string().optional(),
   })
 )
 

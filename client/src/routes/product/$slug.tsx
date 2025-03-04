@@ -2,7 +2,7 @@ import { createFileRoute, notFound } from '@tanstack/react-router'
 import { queryClient, trpc } from '../../lib/trpc'
 import { useForm } from 'react-hook-form'
 import { useContext, useState } from 'react'
-import { centsToDollars } from '../../lib/helpers'
+import { centsToDollars, sortStringify } from '../../lib/helpers'
 import { CartContext } from '../../context/cart'
 import { CustomChoices } from '@/server/schema/item.schema'
 
@@ -20,14 +20,12 @@ export const Route = createFileRoute('/product/$slug')({
 })
 
 function RouteComponent() {
-  const cart = useContext(CartContext)
   const product = Route.useLoaderData()
 
-  type Item = (typeof product.items)[0]
+  const cart = useContext(CartContext)
 
-  const [selectedItem, setSelectedItem] = useState<Item | undefined>(
-    product.items[0]
-  )
+  const [selectedItem, setSelectedItem] = useState(product.items[0])
+
   const variantForm = useForm<Record<string, string>>({
     defaultValues: selectedItem?.variant,
   })
@@ -37,7 +35,7 @@ function RouteComponent() {
   })
 
   const items = variantToItemMap(product)
-  const itemIsAvailable = selectedItem?.sku !== undefined
+  const itemIsAvailable = selectedItem !== undefined
   const itemPrice = itemIsAvailable
     ? centsToDollars(selectedItem.price)
     : 'Out of stock.'
@@ -51,7 +49,7 @@ function RouteComponent() {
   const handleSubmit = variantForm.handleSubmit(() => {
     if (selectedItem) {
       const customChoices = customChoicesForm.getValues()
-      cart.incrementCart(selectedItem.sku, customChoices)
+      cart.incrementCart(selectedItem, customChoices)
     }
   })
 
@@ -122,12 +120,20 @@ function RouteComponent() {
                 )
               )}
           </form>
-          <form>
+          <form className="flex flex-col gap-8 pt-8">
             {selectedItem?.customFields &&
               Object.entries(selectedItem.customFields).map(
                 ([field, fieldData]) => (
                   <div>
-                    <div>{fieldData.name + ': '}</div>
+                    <div>
+                      {fieldData.name + ': '}
+                      <span className="font-bold">
+                        {
+                          fieldData.options[customChoicesForm.getValues(field)]
+                            ?.name
+                        }
+                      </span>
+                    </div>
                     <div className="flex gap-2">
                       {Object.entries(fieldData.options).map(
                         ([option, optionData]) => (
@@ -175,11 +181,6 @@ function RouteComponent() {
       </section>
     </main>
   )
-}
-
-// sort keys of object before stringifying so we can safely use them as keys
-function sortStringify(obj: Object) {
-  return JSON.stringify(obj, Object.keys(obj).sort())
 }
 
 function variantToItemMap<
