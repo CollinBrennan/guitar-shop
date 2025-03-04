@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "node --experimental-strip-types --experimental-transform-types --watch server.ts",
     "db:seed": "node --experimental-strip-types --experimental-transform-types scripts/seed.ts",
+    "db:clear": "node --experimental-strip-types --experimental-transform-types scripts/clear.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

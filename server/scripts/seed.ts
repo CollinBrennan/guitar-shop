@@ -162,11 +162,49 @@ async function seed() {
     description: 'Your very own custom guitar!',
     slug: 'custom-guitar',
     imageUrl: 'https://i.imgur.com/dLVWfHZ.png',
+    variantFields: {
+      handedness: {
+        name: 'Handedness',
+        options: {
+          right: { name: 'Right-Handed' },
+          left: { name: 'Left-Handed' },
+        },
+      },
+    },
     items: [
+      {
+        sku: 'GTR-CSTM-L',
+        price: 50000,
+        variant: { handedness: 'left' },
+        customFields: {
+          bodyWood: {
+            name: 'Body Wood',
+            options: {
+              alder: { name: 'Alder', color: '#eab37a', fee: 0 },
+              mahogany: {
+                name: 'Mahogany',
+                color: '#7a2c20',
+                fee: 10000,
+              },
+            },
+          },
+          frets: {
+            name: 'Frets',
+            options: {
+              standard: { name: 'Standard', fee: 0 },
+              stainlessSteel: { name: 'Stainless Steel', fee: 5000 },
+            },
+          },
+        },
+        customDefaultChoices: {
+          bodyWood: 'alder',
+          frets: 'standard',
+        },
+      },
       {
         sku: 'GTR-CSTM',
         price: 50000,
-        variant: {},
+        variant: { handedness: 'right' },
         customFields: {
           bodyWood: {
             name: 'Body Wood',

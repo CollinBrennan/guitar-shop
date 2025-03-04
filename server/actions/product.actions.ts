@@ -38,3 +38,7 @@ export async function createProduct(
 
   return product as Product
 }
+
+export async function deleteProducts() {
+  await prisma.product.deleteMany()
+}

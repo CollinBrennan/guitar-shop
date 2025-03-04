@@ -31,3 +31,7 @@ export async function getItemsFromCart(
 
   return itemsRecord
 }
+
+export async function deleteItems() {
+  await prisma.item.deleteMany()
+}
