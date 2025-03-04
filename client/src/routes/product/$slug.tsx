@@ -73,18 +73,13 @@ function RouteComponent() {
               Object.entries(product.variantFields).map(
                 ([field, fieldData]) => (
                   <div>
-                    {product.variantFields && (
-                      <div>
-                        {fieldData.name + ': '}
-                        <span className="font-bold">
-                          {
-                            product.variantFields[field]?.options[
-                              variantForm.getValues(field)
-                            ]?.name
-                          }
-                        </span>
-                      </div>
-                    )}
+                    <div>
+                      {fieldData.name + ': '}
+                      <span className="font-bold">
+                        {fieldData.options[variantForm.watch(field)]?.name}
+                      </span>
+                    </div>
+
                     <div className="flex gap-2">
                       {Object.entries(fieldData.options).map(
                         ([option, optionData]) => (
@@ -120,7 +115,10 @@ function RouteComponent() {
                 )
               )}
           </form>
-          <form className="flex flex-col gap-8 pt-8">
+          <form
+            onChange={() => console.log(customChoicesForm.getValues())}
+            className="flex flex-col gap-8 pt-8"
+          >
             {selectedItem?.customFields &&
               Object.entries(selectedItem.customFields).map(
                 ([field, fieldData]) => (
@@ -129,7 +127,7 @@ function RouteComponent() {
                       {fieldData.name + ': '}
                       <span className="font-bold">
                         {
-                          fieldData.options[customChoicesForm.getValues(field)]
+                          fieldData.options[customChoicesForm.watch(field)]
                             ?.name
                         }
                       </span>
