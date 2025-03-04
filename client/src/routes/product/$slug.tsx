@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useContext, useState } from 'react'
 import { centsToDollars, sortStringify } from '../../lib/helpers'
 import { CartContext } from '../../context/cart'
-import { CustomChoices } from '@/server/schema/item.schema'
+import { CustomChoices, Item } from '@/server/schema/item.schema'
 
 export const Route = createFileRoute('/product/$slug')({
   component: RouteComponent,
@@ -37,7 +37,7 @@ function RouteComponent() {
   const items = variantToItemMap(product)
   const itemIsAvailable = selectedItem !== undefined
   const itemPrice = itemIsAvailable
-    ? centsToDollars(selectedItem.price)
+    ? priceFromCustomChoices(selectedItem, customChoicesForm.getValues())
     : 'Out of stock.'
 
   function handleChange() {
@@ -132,7 +132,7 @@ function RouteComponent() {
                         }
                       </span>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-col gap-2">
                       {Object.entries(fieldData.options).map(
                         ([option, optionData]) => (
                           <div className="relative flex">
@@ -145,19 +145,24 @@ function RouteComponent() {
                             />
                             <label
                               htmlFor={`${field}-${option}`}
-                              className="flex items-center justify-between"
+                              className="flex w-full items-center justify-between"
                             >
-                              {optionData.color ? (
-                                <div
-                                  className="size-8 rounded-full aspect-square border border-neutral-300"
-                                  title={optionData.name}
-                                  style={{ backgroundColor: optionData.color }}
-                                />
-                              ) : (
-                                <div className="text-sm px-4 py-2 rounded-full border border-neutral-300">
-                                  {optionData.name}
+                              <div className="text-sm flex justify-between items-center w-full pl-2 pr-4 py-2 rounded-full border border-neutral-300">
+                                <div className="flex items-center">
+                                  {optionData.color && (
+                                    <div
+                                      className="size-5 rounded-full"
+                                      style={{
+                                        backgroundColor: optionData.color,
+                                      }}
+                                    />
+                                  )}
+                                  <div className="pl-2">{optionData.name}</div>
                                 </div>
-                              )}
+                                <div className="text-muted">
+                                  +{centsToDollars(optionData.fee)}
+                                </div>
+                              </div>
                             </label>
                           </div>
                         )
@@ -188,4 +193,12 @@ function variantToItemMap<
     (record, item) => ({ ...record, [sortStringify(item.variant)]: item }),
     {} as Record<string, T>
   )
+}
+
+function priceFromCustomChoices(item: Item, choices: CustomChoices) {
+  const price = Object.entries(choices).reduce((acc, [field, choice]) => {
+    return (acc += item.customFields?.[field]?.options[choice]?.fee || 0)
+  }, item.price)
+
+  return centsToDollars(price)
 }
