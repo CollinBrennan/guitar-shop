@@ -1,8 +1,15 @@
-import type { ItemsRecord, ItemWithProduct } from '../actions/item.actions.ts'
 import type { CartItems } from '../schema/checkout.schema.ts'
-import type { CustomChoices, CustomFields } from '../schema/item.schema.ts'
+import type {
+  CustomChoices,
+  CustomFields,
+  ItemsWithProductRecord,
+  ItemWithProduct,
+} from '../schema/item.schema.ts'
 
-export function lineItemsFromCart(cartItems: CartItems, items: ItemsRecord) {
+export function lineItemsFromCart(
+  cartItems: CartItems,
+  items: ItemsWithProductRecord
+) {
   const lineItems = Object.entries(cartItems).map(([cartItemSku, cartItem]) => {
     const sku = skuFromCartItemSku(cartItemSku)
     const item = items[sku]

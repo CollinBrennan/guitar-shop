@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import type { Item as RawItem } from '@prisma/client'
+import type { Product } from './product.schema.ts'
 
 const customFieldsSchema = z.record(
   z.string(), // field value (ex. 'wood')
@@ -49,3 +50,7 @@ export type Item = Omit<
   customFields: CustomFields | null
   customDefaultChoices: CustomChoices | null
 }
+
+export type ItemWithProduct = Item & { product: Product }
+
+export type ItemsWithProductRecord = Record<string, ItemWithProduct>

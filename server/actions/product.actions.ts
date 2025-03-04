@@ -1,11 +1,9 @@
 import prisma from '../lib/prisma.ts'
-import type { Item } from '../schema/item.schema.ts'
-import type { Product, CreateProductData } from '../schema/product.schema.ts'
-
-// needed to typecast raw json fields
-type ProductWithItems = Omit<Product, 'items'> & {
-  items: Item[]
-}
+import type {
+  Product,
+  CreateProductData,
+  ProductWithItems,
+} from '../schema/product.schema.ts'
 
 export async function getProducts(): Promise<Product[]> {
   const products = await prisma.product.findMany()
