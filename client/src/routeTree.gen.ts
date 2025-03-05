@@ -11,7 +11,8 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as ProductsImport } from './routes/products'
+import { Route as ShopImport } from './routes/shop'
+import { Route as ContactImport } from './routes/contact'
 import { Route as CheckoutImport } from './routes/checkout'
 import { Route as CartImport } from './routes/cart'
 import { Route as IndexImport } from './routes/index'
@@ -19,9 +20,15 @@ import { Route as ProductSlugImport } from './routes/product/$slug'
 
 // Create/Update Routes
 
-const ProductsRoute = ProductsImport.update({
-  id: '/products',
-  path: '/products',
+const ShopRoute = ShopImport.update({
+  id: '/shop',
+  path: '/shop',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ContactRoute = ContactImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -74,11 +81,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CheckoutImport
       parentRoute: typeof rootRoute
     }
-    '/products': {
-      id: '/products'
-      path: '/products'
-      fullPath: '/products'
-      preLoaderRoute: typeof ProductsImport
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactImport
+      parentRoute: typeof rootRoute
+    }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopImport
       parentRoute: typeof rootRoute
     }
     '/product/$slug': {
@@ -97,7 +111,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
-  '/products': typeof ProductsRoute
+  '/contact': typeof ContactRoute
+  '/shop': typeof ShopRoute
   '/product/$slug': typeof ProductSlugRoute
 }
 
@@ -105,7 +120,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
-  '/products': typeof ProductsRoute
+  '/contact': typeof ContactRoute
+  '/shop': typeof ShopRoute
   '/product/$slug': typeof ProductSlugRoute
 }
 
@@ -114,16 +130,30 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
-  '/products': typeof ProductsRoute
+  '/contact': typeof ContactRoute
+  '/shop': typeof ShopRoute
   '/product/$slug': typeof ProductSlugRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cart' | '/checkout' | '/products' | '/product/$slug'
+  fullPaths:
+    | '/'
+    | '/cart'
+    | '/checkout'
+    | '/contact'
+    | '/shop'
+    | '/product/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cart' | '/checkout' | '/products' | '/product/$slug'
-  id: '__root__' | '/' | '/cart' | '/checkout' | '/products' | '/product/$slug'
+  to: '/' | '/cart' | '/checkout' | '/contact' | '/shop' | '/product/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/cart'
+    | '/checkout'
+    | '/contact'
+    | '/shop'
+    | '/product/$slug'
   fileRoutesById: FileRoutesById
 }
 
@@ -131,7 +161,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
-  ProductsRoute: typeof ProductsRoute
+  ContactRoute: typeof ContactRoute
+  ShopRoute: typeof ShopRoute
   ProductSlugRoute: typeof ProductSlugRoute
 }
 
@@ -139,7 +170,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
-  ProductsRoute: ProductsRoute,
+  ContactRoute: ContactRoute,
+  ShopRoute: ShopRoute,
   ProductSlugRoute: ProductSlugRoute,
 }
 
@@ -156,7 +188,8 @@ export const routeTree = rootRoute
         "/",
         "/cart",
         "/checkout",
-        "/products",
+        "/contact",
+        "/shop",
         "/product/$slug"
       ]
     },
@@ -169,8 +202,11 @@ export const routeTree = rootRoute
     "/checkout": {
       "filePath": "checkout.tsx"
     },
-    "/products": {
-      "filePath": "products.tsx"
+    "/contact": {
+      "filePath": "contact.tsx"
+    },
+    "/shop": {
+      "filePath": "shop.tsx"
     },
     "/product/$slug": {
       "filePath": "product/$slug.tsx"
