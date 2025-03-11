@@ -1,19 +1,12 @@
-import { cartItemsSchema } from '../schema/checkout.schema.ts'
 import stripe from '../lib/stripe.ts'
 import { lineItemsFromCart } from '../lib/helpers.ts'
-import { procedure, router } from '../lib/trpc.ts'
 import { TRPCError } from '@trpc/server'
-import { getItemsFromCart } from '../actions/item.actions.ts'
+import { cartProcedure, router } from '../lib/trpc.ts'
 
 const checkoutRouter = router({
-  create: procedure.input(cartItemsSchema).mutation(async ({ input }) => {
-    const items = await getItemsFromCart(input)
-
-    if (Object.keys(items).length === 0)
-      throw new TRPCError({ code: 'BAD_REQUEST', message: 'Cart is empty' })
-
+  create: cartProcedure.mutation(async ({ ctx, input }) => {
     try {
-      const lineItems = lineItemsFromCart(input, items)
+      const lineItems = lineItemsFromCart(input, ctx.items)
       const session = await stripe.checkout.sessions.create({
         ui_mode: 'embedded',
         line_items: lineItems,

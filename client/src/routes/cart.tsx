@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useContext } from 'react'
 import { CartContext } from '../context/cart'
+import PageContainer from '../components/page-container'
 
 export const Route = createFileRoute('/cart')({
   component: RouteComponent,
@@ -8,11 +9,15 @@ export const Route = createFileRoute('/cart')({
 
 function RouteComponent() {
   const cart = useContext(CartContext)
+
   return (
-    <div>
+    <PageContainer
+      heading="Shopping Cart"
+      backButton={{ label: 'Continue shopping', to: '/shop' }}
+    >
       <pre>{JSON.stringify(cart.items, null, 2)}</pre>
 
       <Link to="/checkout">Checkout</Link>
-    </div>
+    </PageContainer>
   )
 }

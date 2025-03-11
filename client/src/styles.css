@@ -1,9 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap');
 @import 'tailwindcss';
 
+@font-face {
+  font-family: Darkline;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/Darkline.woff2') format('woff2');
+}
+
 @theme {
-  --font-sans: Roboto, sans;
-  --font-pacifico: Pacifico, sans;
+  --font-sans: Roboto Flex, sans;
+  --font-display-l: Archivo Black, sans;
+  --font-display: Archivo Narrow, sans;
+  --font-brand: Darkline, sans;
+
+  --color-primary: oklch(0% 0 0);
+  --color-primary-bg: oklch(100% 0 0);
+
+  --color-secondary: oklch(100% 0 0);
+  --color-secondary-bg: oklch(0% 0 0);
 
   --color-muted: oklch(0.556 0 0);
+  --color-muted-bg: oklch(0.97 0 0);
 }
