@@ -2,10 +2,10 @@ import { createFileRoute, notFound } from '@tanstack/react-router'
 import PageContainer from '../../components/page-container'
 import { queryClient, trpc } from '../../lib/trpc'
 
-export const Route = createFileRoute('/product/$slug')({
+export const Route = createFileRoute('/custom/$slug')({
   component: RouteComponent,
   loader: async ({ params }) => {
-    const productQueryOptions = trpc.product.getWithItemsBySlug.queryOptions(
+    const productQueryOptions = trpc.customProduct.getBySlug.queryOptions(
       params.slug
     )
     const product = await queryClient.ensureQueryData(productQueryOptions)

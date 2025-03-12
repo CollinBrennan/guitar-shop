@@ -3,13 +3,14 @@ import { trpc } from '../lib/trpc'
 import { useQuery } from '@tanstack/react-query'
 import PageContainer from '../components/page-container'
 import ProductCard from '../components/product-card'
+import CustomProductCard from '../components/custom-product-card'
 
 export const Route = createFileRoute('/guitars')({
   component: AboutComponent,
 })
 
 function AboutComponent() {
-  const productQuery = useQuery(trpc.product.list.queryOptions())
+  const productQuery = useQuery(trpc.customProduct.list.queryOptions())
 
   return (
     <PageContainer heading="Guitars">
@@ -21,7 +22,9 @@ function AboutComponent() {
         ))}
       </div>
       <div className="grid grid-cols-4 gap-4 pt-4">
-        {productQuery.data?.map((product) => <ProductCard product={product} />)}
+        {productQuery.data?.map((product) => (
+          <CustomProductCard product={product} />
+        ))}
       </div>
     </PageContainer>
   )
