@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { createItemSchema, type Item } from './item.schema.ts'
-import type { Product as RawProduct } from '@prisma/client'
+import type { Product as DbProduct } from '@prisma/client'
 
 const variantFieldsSchema = z.record(
   z.string(), // field value (ex. 'size')
@@ -16,23 +16,33 @@ const variantFieldsSchema = z.record(
   })
 )
 
+export const specsSchema = z.array(
+  z.object({
+    label: z.string(),
+    body: z.string(),
+  })
+)
+
 export const createProductSchema = z.object({
   name: z.string(),
-  price: z.number().int().positive(),
-  description: z.string(),
   slug: z.string(),
+  category: z.string(),
+  description: z.string(),
+  price: z.number().int().nonnegative(),
   imageUrl: z.string().optional(),
+  specs: specsSchema.optional(),
   variantFields: variantFieldsSchema.optional(),
   items: z.array(createItemSchema),
 })
 
 export type CreateProductData = z.infer<typeof createProductSchema>
 
-export type Product = Omit<RawProduct, 'variantFields'> & {
+export type Specs = z.infer<typeof specsSchema>
+
+export type Product = Omit<DbProduct, 'variantFields'> & {
   variantFields: z.infer<typeof variantFieldsSchema> | null
 }
 
-// needed to typecast raw json fields
 export type ProductWithItems = Omit<Product, 'items'> & {
   items: Item[]
 }

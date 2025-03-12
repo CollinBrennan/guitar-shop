@@ -7,16 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+type Spec {
+  label String
+  body  String
+}
+
 model Item {
-  id                   String  @id @default(auto()) @map("_id") @db.ObjectId
-  sku                  String  @unique
-  price                Int
-  variant              Json
-  imageUrl             String?
-  customFields         Json?
-  customDefaultChoices Json?
-  productId            String  @db.ObjectId
-  product              Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  sku      String  @unique
+  price    Int
+  imageUrl String?
+  variant  Json
+
+  productId String  @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@unique([productId, variant])
 }
@@ -24,12 +28,29 @@ model Item {
 model Product {
   id            String  @id @default(auto()) @map("_id") @db.ObjectId
   name          String
-  price         Int
-  description   String
   slug          String  @unique
+  category      String
+  description   String
+  price         Int
   imageUrl      String?
+  specs         Spec[]
   variantFields Json?
   items         Item[]
+}
+
+model CustomProduct {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  sku            String  @unique
+  name           String
+  model          String
+  slug           String  @unique
+  category       String
+  description    String
+  price          Int
+  imageUrl       String?
+  specs          Spec[]
+  customFields   Json
+  customDefaults Json
 }
 
 enum Role {

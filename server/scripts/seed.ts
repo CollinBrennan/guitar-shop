@@ -1,8 +1,10 @@
+import { createCustomProduct } from '../actions/custom-product.actions.ts'
 import { createProduct } from '../actions/product.actions.ts'
 
 async function seed() {
   await createProduct({
     name: 'Guitar Stand',
+    category: 'accessories',
     price: 2000,
     description: 'Guitar stand!',
     slug: 'guitar-stand',
@@ -18,6 +20,7 @@ async function seed() {
 
   await createProduct({
     name: 'Guitar Picks',
+    category: 'accessories',
     price: 1000,
     description: 'Cool amazing guitar picks!.',
     slug: 'guitar-picks',
@@ -119,10 +122,12 @@ async function seed() {
 
   await createProduct({
     name: 'Instrument Cable',
+    category: 'gear',
     price: 1500,
     description: 'Cool amazing instrument cable!',
     slug: 'instrument-cable',
     imageUrl: 'https://i.imgur.com/jFztfPR.jpeg',
+    specs: [{ label: 'Material', body: 'Fabric' }],
     variantFields: {
       color: {
         name: 'Color',
@@ -156,81 +161,43 @@ async function seed() {
     ],
   })
 
-  await createProduct({
-    name: 'Custom Guitar',
+  await createCustomProduct({
+    name: 'Custom S1 Guitar',
+    model: 'S1',
+    category: 'guitar',
+    sku: 'CSTM-GTR-S1',
     price: 50000,
-    description: 'Your very own custom guitar!',
-    slug: 'custom-guitar',
+    description: 'Your very own custom S1 guitar!',
+    slug: 's1',
     imageUrl: 'https://i.imgur.com/dLVWfHZ.png',
-    variantFields: {
-      handedness: {
-        name: 'Handedness',
+    specs: [
+      { label: 'Pickups', body: 'Canvas Brand Pickups' },
+      { label: 'Scale Length', body: '25 1/2"' },
+    ],
+    customFields: {
+      bodyWood: {
+        name: 'Body Wood',
         options: {
-          right: { name: 'Right-Handed' },
-          left: { name: 'Left-Handed' },
+          alder: { name: 'Alder', color: '#eab37a', fee: 0 },
+          mahogany: {
+            name: 'Mahogany',
+            color: '#7a2c20',
+            fee: 10000,
+          },
+        },
+      },
+      frets: {
+        name: 'Frets',
+        options: {
+          standard: { name: 'Standard', fee: 0 },
+          stainlessSteel: { name: 'Stainless Steel', fee: 5000 },
         },
       },
     },
-    items: [
-      {
-        sku: 'GTR-CSTM-L',
-        price: 50000,
-        variant: { handedness: 'left' },
-        customFields: {
-          bodyWood: {
-            name: 'Body Wood',
-            options: {
-              alder: { name: 'Alder', color: '#eab37a', fee: 0 },
-              mahogany: {
-                name: 'Mahogany',
-                color: '#7a2c20',
-                fee: 10000,
-              },
-            },
-          },
-          frets: {
-            name: 'Frets',
-            options: {
-              standard: { name: 'Standard', fee: 0 },
-              stainlessSteel: { name: 'Stainless Steel', fee: 5000 },
-            },
-          },
-        },
-        customDefaultChoices: {
-          bodyWood: 'alder',
-          frets: 'standard',
-        },
-      },
-      {
-        sku: 'GTR-CSTM',
-        price: 50000,
-        variant: { handedness: 'right' },
-        customFields: {
-          bodyWood: {
-            name: 'Body Wood',
-            options: {
-              alder: { name: 'Alder', color: '#eab37a', fee: 0 },
-              mahogany: {
-                name: 'Mahogany',
-                color: '#7a2c20',
-                fee: 10000,
-              },
-            },
-          },
-          frets: {
-            name: 'Frets',
-            options: {
-              standard: { name: 'Standard', fee: 0 },
-              stainlessSteel: { name: 'Stainless Steel', fee: 5000 },
-            },
-          },
-        },
-        customDefaultChoices: {
-          bodyWood: 'alder',
-          frets: 'standard',
-        },
-      },
-    ],
+    customDefaults: {
+      bodyWood: 'alder',
+      frets: 'standard',
+    },
   })
 
   console.log('Database seeded.')
