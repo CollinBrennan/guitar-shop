@@ -10,13 +10,15 @@ import { z } from 'zod'
 import { createProductSchema } from '../schema/product.schema.ts'
 
 const productRouter = router({
-  get: procedure.input(z.string()).query(async ({ input }) => {
+  getWithItemsBySlug: procedure.input(z.string()).query(async ({ input }) => {
     const product = await getProductWithItemsBySlug(input)
+
     return product
   }),
 
   list: procedure.query(async () => {
     const products = await getProducts()
+
     return products
   }),
 
@@ -25,6 +27,7 @@ const productRouter = router({
     .mutation(async ({ input }) => {
       try {
         const product = await createProduct(input)
+
         return product
       } catch (error) {
         if (error instanceof PrismaClientKnownRequestError)

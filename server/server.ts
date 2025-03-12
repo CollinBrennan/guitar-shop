@@ -1,12 +1,14 @@
 import express from 'express'
 import cors from 'cors'
-import { ExpressAuth } from '@auth/express'
 import morgan from 'morgan'
+import { ExpressAuth } from '@auth/express'
 import { authConfig } from './lib/auth.ts'
 import { createContext, router } from './lib/trpc.ts'
-import productRouter from './routes/product.route.ts'
 import { createExpressMiddleware } from '@trpc/server/adapters/express'
-import checkoutRouter from './routes/checkout.route..ts'
+
+import productRouter from './routes/product.route.ts'
+import customProductRouter from './routes/custom-product.route.ts'
+import checkoutRouter from './routes/checkout.route.ts'
 
 const app = express()
 
@@ -17,6 +19,7 @@ const corsOptions = {
 // trpc
 const appRouter = router({
   product: productRouter,
+  customProduct: customProductRouter,
   checkout: checkoutRouter,
 })
 
