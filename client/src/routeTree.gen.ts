@@ -17,8 +17,9 @@ import { Route as CheckoutImport } from './routes/checkout'
 import { Route as CartImport } from './routes/cart'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
-import { Route as ProductSlugImport } from './routes/product/$slug'
-import { Route as CustomSlugImport } from './routes/custom/$slug'
+import { Route as ProductSlugImport } from './routes/product.$slug'
+import { Route as DesignSlugImport } from './routes/design.$slug'
+import { Route as CustomSlugImport } from './routes/custom.$slug'
 
 // Create/Update Routes
 
@@ -61,6 +62,12 @@ const IndexRoute = IndexImport.update({
 const ProductSlugRoute = ProductSlugImport.update({
   id: '/product/$slug',
   path: '/product/$slug',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DesignSlugRoute = DesignSlugImport.update({
+  id: '/design/$slug',
+  path: '/design/$slug',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -123,6 +130,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomSlugImport
       parentRoute: typeof rootRoute
     }
+    '/design/$slug': {
+      id: '/design/$slug'
+      path: '/design/$slug'
+      fullPath: '/design/$slug'
+      preLoaderRoute: typeof DesignSlugImport
+      parentRoute: typeof rootRoute
+    }
     '/product/$slug': {
       id: '/product/$slug'
       path: '/product/$slug'
@@ -143,6 +157,7 @@ export interface FileRoutesByFullPath {
   '/guitars': typeof GuitarsRoute
   '/shop': typeof ShopRoute
   '/custom/$slug': typeof CustomSlugRoute
+  '/design/$slug': typeof DesignSlugRoute
   '/product/$slug': typeof ProductSlugRoute
 }
 
@@ -154,6 +169,7 @@ export interface FileRoutesByTo {
   '/guitars': typeof GuitarsRoute
   '/shop': typeof ShopRoute
   '/custom/$slug': typeof CustomSlugRoute
+  '/design/$slug': typeof DesignSlugRoute
   '/product/$slug': typeof ProductSlugRoute
 }
 
@@ -166,6 +182,7 @@ export interface FileRoutesById {
   '/guitars': typeof GuitarsRoute
   '/shop': typeof ShopRoute
   '/custom/$slug': typeof CustomSlugRoute
+  '/design/$slug': typeof DesignSlugRoute
   '/product/$slug': typeof ProductSlugRoute
 }
 
@@ -179,6 +196,7 @@ export interface FileRouteTypes {
     | '/guitars'
     | '/shop'
     | '/custom/$slug'
+    | '/design/$slug'
     | '/product/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -189,6 +207,7 @@ export interface FileRouteTypes {
     | '/guitars'
     | '/shop'
     | '/custom/$slug'
+    | '/design/$slug'
     | '/product/$slug'
   id:
     | '__root__'
@@ -199,6 +218,7 @@ export interface FileRouteTypes {
     | '/guitars'
     | '/shop'
     | '/custom/$slug'
+    | '/design/$slug'
     | '/product/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -211,6 +231,7 @@ export interface RootRouteChildren {
   GuitarsRoute: typeof GuitarsRoute
   ShopRoute: typeof ShopRoute
   CustomSlugRoute: typeof CustomSlugRoute
+  DesignSlugRoute: typeof DesignSlugRoute
   ProductSlugRoute: typeof ProductSlugRoute
 }
 
@@ -222,6 +243,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuitarsRoute: GuitarsRoute,
   ShopRoute: ShopRoute,
   CustomSlugRoute: CustomSlugRoute,
+  DesignSlugRoute: DesignSlugRoute,
   ProductSlugRoute: ProductSlugRoute,
 }
 
@@ -242,6 +264,7 @@ export const routeTree = rootRoute
         "/guitars",
         "/shop",
         "/custom/$slug",
+        "/design/$slug",
         "/product/$slug"
       ]
     },
@@ -264,10 +287,13 @@ export const routeTree = rootRoute
       "filePath": "shop.tsx"
     },
     "/custom/$slug": {
-      "filePath": "custom/$slug.tsx"
+      "filePath": "custom.$slug.tsx"
+    },
+    "/design/$slug": {
+      "filePath": "design.$slug.tsx"
     },
     "/product/$slug": {
-      "filePath": "product/$slug.tsx"
+      "filePath": "product.$slug.tsx"
     }
   }
 }

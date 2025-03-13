@@ -1,14 +1,14 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
-import PageContainer from '../../components/page-container'
-import { queryClient, trpc } from '../../lib/trpc'
+import PageContainer from '../components/page-container'
+import { queryClient, trpc } from '../lib/trpc'
 import { useContext, useState } from 'react'
 import { ProductWithItems } from '@/server/schema/product.schema'
-import { Item } from '@/server/schema/item.schema'
-import { centsToDollars, sortStringify } from '../../lib/helpers'
+import { centsToDollars, sortStringify } from '../lib/helpers'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CartContext } from '../../context/cart'
+import { CartContext } from '../context/cart'
+import { Item } from '@/server/schema/item.schema'
 
 export const Route = createFileRoute('/product/$slug')({
   component: RouteComponent,
@@ -169,11 +169,9 @@ function ItemForm({ product }: ItemFormProps) {
   )
 }
 
-function createItemMap<T extends { variant: Record<string, string> }>(product: {
-  items: T[]
-}): Record<string, T> {
+function createItemMap(product: ProductWithItems): Record<string, Item> {
   return product.items.reduce(
-    (record, item) => ({ ...record, [sortStringify(item.variant)]: item }),
-    {} as Record<string, T>
+    (map, item) => ({ ...map, [sortStringify(item.variant)]: item }),
+    {}
   )
 }

@@ -17,7 +17,7 @@ export default function CustomProductCard({ product }: Props) {
         />
       </div>
       <p className="font-display uppercase font-muted text-xs pt-1 tracking-widest text-muted">
-        Gear
+        {product.category}
       </p>
       <h2 className="font-display text-2xl uppercase font-bold leading-6 line-clamp-2 h-12">
         {product.name}
