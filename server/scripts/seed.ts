@@ -25,6 +25,17 @@ async function seed() {
     description: 'Cool amazing guitar picks!.',
     slug: 'guitar-picks',
     imageUrl: 'https://i.imgur.com/HtK3ioz.jpeg',
+    specs: [
+      { label: 'Material', body: 'Delrin' },
+      {
+        label: 'Really really really really long label for specs',
+        body: 'Something',
+      },
+      {
+        label: 'Something',
+        body: 'Really really really really long body for specs',
+      },
+    ],
     variantFields: {
       color: {
         name: 'Color',
