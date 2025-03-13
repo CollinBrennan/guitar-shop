@@ -1,33 +1,33 @@
 import { createContext, PropsWithChildren, useState } from 'react'
 import { type CartItems } from '@server/schema/checkout.schema'
-import { CustomChoices, Item } from '@/server/schema/item.schema'
 import { sortStringify } from '../lib/helpers'
+import { Item } from '@/server/schema/item.schema'
 
 type CartProviderValue = {
-  items: CartItems
-  incrementCart: (item: Item, customChoices: CustomChoices) => void
+  cartItems: CartItems
+  incrementItem: (item: Item, increment: number) => void
 }
 
 export const CartContext = createContext({} as CartProviderValue)
 
 export function CartProvider({ children }: PropsWithChildren) {
-  const [items, setItems] = useState({} as CartItems)
+  const [cartItems, setCartItems] = useState({
+    items: {},
+    customItems: [],
+  } as CartItems)
 
-  function incrementCart(item: Item, customChoices: CustomChoices) {
-    setItems((prev) => {
-      const customChoicesString = sortStringify(customChoices)
-      // add custom choices to sku so it's unique in the cart record
-      const sku = `${item.sku},${customChoicesString}`
-      const quantity = (prev[sku]?.quantity || 0) + 1
+  function incrementItem(item: Item, increment: number) {
+    setCartItems((prev) => {
+      const quantity = (prev.items[item.sku]?.quantity || 0) + increment
       return {
-        ...prev,
-        [sku]: { quantity, customChoices },
+        items: { ...prev.items, [item.sku]: { quantity } },
+        customItems: prev.customItems,
       }
     })
   }
 
   return (
-    <CartContext.Provider value={{ items, incrementCart }}>
+    <CartContext.Provider value={{ cartItems, incrementItem }}>
       {children}
     </CartContext.Provider>
   )

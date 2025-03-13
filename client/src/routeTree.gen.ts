@@ -17,7 +17,6 @@ import { Route as CheckoutImport } from './routes/checkout'
 import { Route as CartImport } from './routes/cart'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
-import { Route as ProductOldSlugImport } from './routes/product/old-$slug'
 import { Route as ProductSlugImport } from './routes/product/$slug'
 import { Route as CustomSlugImport } from './routes/custom/$slug'
 
@@ -56,12 +55,6 @@ const AboutRoute = AboutImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ProductOldSlugRoute = ProductOldSlugImport.update({
-  id: '/product/old-$slug',
-  path: '/product/old-$slug',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -137,13 +130,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductSlugImport
       parentRoute: typeof rootRoute
     }
-    '/product/old-$slug': {
-      id: '/product/old-$slug'
-      path: '/product/old-$slug'
-      fullPath: '/product/old-$slug'
-      preLoaderRoute: typeof ProductOldSlugImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
@@ -158,7 +144,6 @@ export interface FileRoutesByFullPath {
   '/shop': typeof ShopRoute
   '/custom/$slug': typeof CustomSlugRoute
   '/product/$slug': typeof ProductSlugRoute
-  '/product/old-$slug': typeof ProductOldSlugRoute
 }
 
 export interface FileRoutesByTo {
@@ -170,7 +155,6 @@ export interface FileRoutesByTo {
   '/shop': typeof ShopRoute
   '/custom/$slug': typeof CustomSlugRoute
   '/product/$slug': typeof ProductSlugRoute
-  '/product/old-$slug': typeof ProductOldSlugRoute
 }
 
 export interface FileRoutesById {
@@ -183,7 +167,6 @@ export interface FileRoutesById {
   '/shop': typeof ShopRoute
   '/custom/$slug': typeof CustomSlugRoute
   '/product/$slug': typeof ProductSlugRoute
-  '/product/old-$slug': typeof ProductOldSlugRoute
 }
 
 export interface FileRouteTypes {
@@ -197,7 +180,6 @@ export interface FileRouteTypes {
     | '/shop'
     | '/custom/$slug'
     | '/product/$slug'
-    | '/product/old-$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -208,7 +190,6 @@ export interface FileRouteTypes {
     | '/shop'
     | '/custom/$slug'
     | '/product/$slug'
-    | '/product/old-$slug'
   id:
     | '__root__'
     | '/'
@@ -219,7 +200,6 @@ export interface FileRouteTypes {
     | '/shop'
     | '/custom/$slug'
     | '/product/$slug'
-    | '/product/old-$slug'
   fileRoutesById: FileRoutesById
 }
 
@@ -232,7 +212,6 @@ export interface RootRouteChildren {
   ShopRoute: typeof ShopRoute
   CustomSlugRoute: typeof CustomSlugRoute
   ProductSlugRoute: typeof ProductSlugRoute
-  ProductOldSlugRoute: typeof ProductOldSlugRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -244,7 +223,6 @@ const rootRouteChildren: RootRouteChildren = {
   ShopRoute: ShopRoute,
   CustomSlugRoute: CustomSlugRoute,
   ProductSlugRoute: ProductSlugRoute,
-  ProductOldSlugRoute: ProductOldSlugRoute,
 }
 
 export const routeTree = rootRoute
@@ -264,8 +242,7 @@ export const routeTree = rootRoute
         "/guitars",
         "/shop",
         "/custom/$slug",
-        "/product/$slug",
-        "/product/old-$slug"
+        "/product/$slug"
       ]
     },
     "/": {
@@ -291,9 +268,6 @@ export const routeTree = rootRoute
     },
     "/product/$slug": {
       "filePath": "product/$slug.tsx"
-    },
-    "/product/old-$slug": {
-      "filePath": "product/old-$slug.tsx"
     }
   }
 }

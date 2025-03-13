@@ -15,7 +15,7 @@ function RouteComponent() {
       heading="Shopping Cart"
       backButton={{ label: 'Continue shopping', to: '/shop' }}
     >
-      <pre>{JSON.stringify(cart.items, null, 2)}</pre>
+      <pre>{JSON.stringify(cart, null, 2)}</pre>
 
       <Link to="/checkout">Checkout</Link>
     </PageContainer>

@@ -1,13 +1,14 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import PageContainer from '../../components/page-container'
 import { queryClient, trpc } from '../../lib/trpc'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { ProductWithItems } from '@/server/schema/product.schema'
 import { Item } from '@/server/schema/item.schema'
 import { centsToDollars, sortStringify } from '../../lib/helpers'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { CartContext } from '../../context/cart'
 
 export const Route = createFileRoute('/product/$slug')({
   component: RouteComponent,
@@ -81,6 +82,8 @@ const itemFormSchema = z.object({
 type ItemForm = z.infer<typeof itemFormSchema>
 
 function ItemForm({ product }: ItemFormProps) {
+  const cart = useContext(CartContext)
+
   const [selectedItem, setSelectedItem] = useState(product.items[0])
 
   const form = useForm<ItemForm>({
@@ -100,7 +103,7 @@ function ItemForm({ product }: ItemFormProps) {
   }
 
   const handleSubmit = form.handleSubmit((data) => {
-    console.log(data)
+    if (selectedItem) cart.incrementItem(selectedItem, data.quantity)
   })
 
   return (
