@@ -8,6 +8,7 @@ import { ShoppingCart, X } from '@phosphor-icons/react'
 import { useState } from 'react'
 import { useCart } from '../context/cart'
 import { centsToDollars } from '../lib/helpers'
+import { Link } from '@tanstack/react-router'
 
 export default function CartDrawer() {
   const [isOpen, setIsOpen] = useState(false)
@@ -35,7 +36,7 @@ export default function CartDrawer() {
               </DialogTitle>
             </div>
 
-            <CartItemForm />
+            <CartItemForm setIsOpen={setIsOpen} />
           </DialogPanel>
         </div>
       </Dialog>
@@ -43,7 +44,11 @@ export default function CartDrawer() {
   )
 }
 
-function CartItemForm() {
+type CartItemFormProps = {
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+function CartItemForm({ setIsOpen }: CartItemFormProps) {
   const { form, cartItems, itemsFieldArray, itemData } = useCart()
 
   const onSubmit = form.handleSubmit((data) => {
@@ -121,10 +126,14 @@ function CartItemForm() {
       <div className="flex flex-col justify-end gap-4">
         <hr className="text-muted" />
         <p className="text-muted">Taxes and shipping calculated at checkout</p>
-        <button className="flex justify-center gap-2 w-full font-display uppercase px-8 py-2 text-secondary bg-secondary-bg">
+        <Link
+          to="/checkout"
+          onClick={() => setIsOpen(false)}
+          className="flex justify-center gap-2 w-full font-display uppercase px-8 py-2 text-secondary bg-secondary-bg"
+        >
           <span>Checkout</span>
           <span>{centsToDollars(subtotal)}</span>
-        </button>
+        </Link>
       </div>
     </form>
   )
