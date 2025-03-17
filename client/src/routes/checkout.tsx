@@ -7,7 +7,7 @@ import {
 } from '@stripe/react-stripe-js'
 import { trpc } from '../lib/trpc'
 import { useMutation } from '@tanstack/react-query'
-import { CartContext } from '../context/cart'
+import { useCart } from '../context/cart'
 
 export const Route = createFileRoute('/checkout')({
   component: RouteComponent,
@@ -16,11 +16,12 @@ export const Route = createFileRoute('/checkout')({
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
 
 function RouteComponent() {
-  const cart = useContext(CartContext)
+  const { cartItems } = useCart()
+
   const { mutateAsync } = useMutation(trpc.checkout.create.mutationOptions())
 
   const fetchClientSecret = async () => {
-    const result = await mutateAsync(cart.items)
+    const result = await mutateAsync(cartItems)
     if (!result) throw new Error('Client secret is invalid')
 
     return result

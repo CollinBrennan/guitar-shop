@@ -1,16 +1,12 @@
-import { skuFromCartItemSku } from '../lib/helpers.ts'
 import prisma from '../lib/prisma.ts'
-import type { CartItems } from '../schema/checkout.schema.ts'
-import type {
-  ItemsWithProductRecord,
-  ItemWithProduct,
-} from '../schema/item.schema.ts'
+import type { Cart } from '../schema/checkout.schema.ts'
+import type { ItemWithProductRecord } from '../schema/item.schema.ts'
 
-export async function getItemsFromCart(
-  cartItems: CartItems
-): Promise<ItemsWithProductRecord> {
-  const skus = Object.keys(cartItems).map((sku) => skuFromCartItemSku(sku))
-  const items = (await prisma.item.findMany({
+export async function getItemDataFromCart(
+  cart: Cart
+): Promise<ItemWithProductRecord> {
+  const skus = cart.items.map((item) => item.sku)
+  const items = await prisma.item.findMany({
     distinct: ['id'],
     where: {
       sku: {
@@ -20,14 +16,14 @@ export async function getItemsFromCart(
     include: {
       product: true,
     },
-  })) as ItemWithProduct[]
+  })
 
-  const itemsRecord = items.reduce((acc, item) => {
-    acc[item.sku] = item
-    return acc
-  }, {} as ItemsWithProductRecord)
+  const itemsRecord = items.reduce(
+    (items, item) => ({ ...items, [item.sku]: item }),
+    {}
+  )
 
-  return itemsRecord
+  return itemsRecord as ItemWithProductRecord
 }
 
 export async function deleteItems() {

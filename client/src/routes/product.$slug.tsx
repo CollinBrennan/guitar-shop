@@ -1,13 +1,13 @@
 import { createFileRoute, notFound } from '@tanstack/react-router'
 import PageContainer from '../components/page-container'
 import { queryClient, trpc } from '../lib/trpc'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { ProductWithItems } from '@/server/schema/product.schema'
 import { centsToDollars, sortStringify } from '../lib/helpers'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CartContext } from '../context/cart'
+import { useCart } from '../context/cart'
 import { Item } from '@/server/schema/item.schema'
 
 export const Route = createFileRoute('/product/$slug')({
@@ -31,7 +31,7 @@ function RouteComponent() {
     <PageContainer backButton={{ label: 'Continue shopping', to: '/shop' }}>
       <div className="flex">
         <div className="w-full">
-          <div className="bg-muted-bg w-full aspect-square rounded-4xl"></div>
+          <div className="bg-muted-bg w-full aspect-square"></div>
         </div>
         <div className="w-full">
           <div className="flex flex-col gap-8 px-12">
@@ -46,23 +46,17 @@ function RouteComponent() {
                 Details
               </h2>
               <p>{product.description}</p>
-            </div>
-
-            {product.specs.length > 0 && (
-              <div className="flex flex-col gap-2">
-                <h2 className="font-display uppercase font-bold text-2xl">
-                  Specs
-                </h2>
+              {product.specs.length > 0 && (
                 <div className="grid grid-cols-2 gap-x-8 gap-y-2 w-fit">
                   {product.specs.map((spec) => (
-                    <>
-                      <p className="font-bold">{spec.label}</p>
+                    <div>
+                      <h3 className="font-bold font-display">{spec.label}</h3>
                       <p>{spec.body}</p>
-                    </>
+                    </div>
                   ))}
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -82,7 +76,7 @@ const itemFormSchema = z.object({
 type ItemForm = z.infer<typeof itemFormSchema>
 
 function ItemForm({ product }: ItemFormProps) {
-  const cart = useContext(CartContext)
+  const cart = useCart()
 
   const [selectedItem, setSelectedItem] = useState(product.items[0])
 
@@ -103,7 +97,8 @@ function ItemForm({ product }: ItemFormProps) {
   }
 
   const handleSubmit = form.handleSubmit((data) => {
-    if (selectedItem) cart.incrementItem(selectedItem, data.quantity)
+    if (selectedItem)
+      cart.incrementItem({ ...selectedItem, product }, data.quantity)
   })
 
   return (
@@ -112,36 +107,15 @@ function ItemForm({ product }: ItemFormProps) {
       onSubmit={handleSubmit}
       className="flex flex-col gap-8"
     >
-      <div className="flex flex-col gap-2">
-        <p className="font-display text-4xl uppercase">{itemPrice}</p>
-
-        <div className="flex gap-2">
-          <input
-            type="number"
-            min={1}
-            max={99}
-            className="w-16 outline-none border-2 px-2 text-center"
-            {...form.register('quantity', { valueAsNumber: true })}
-          />
-          <button
-            type="submit"
-            disabled={!itemIsAvailable}
-            className="font-display uppercase px-8 py-2 text-secondary bg-secondary-bg disabled:opacity-50 enabled:cursor-pointer"
-          >
-            Add to cart
-          </button>
-        </div>
-      </div>
+      <p className="font-display text-4xl uppercase">{itemPrice}</p>
 
       {product.variantFields &&
         Object.entries(product.variantFields).map(([field, fieldData]) => (
-          <div className="flex flex-col gap-2">
-            <h2 className="font-display uppercase font-bold text-2xl">
-              {fieldData.name}
-            </h2>
+          <div key={field} className="flex flex-col gap-2">
+            <h2 className="font-display font-bold">{fieldData.name}</h2>
             <div className="flex gap-2">
               {Object.entries(fieldData.options).map(([option, optionData]) => (
-                <div className="relative flex">
+                <div key={option} className="relative flex">
                   <input
                     id={`${field}-${option}`}
                     type="radio"
@@ -154,8 +128,8 @@ function ItemForm({ product }: ItemFormProps) {
                     style={{ backgroundColor: optionData.color }}
                     className={
                       optionData.color
-                        ? 'border-2 size-6 aspect-square rounded-full outline-offset-2 outline-blue-500 peer-checked:outline-2'
-                        : 'border-2 px-3 py-1 peer-checked:border-blue-500'
+                        ? 'border border-primary/20 size-6 aspect-square  outline-offset-2 outline-black peer-checked:outline'
+                        : 'border border-primary/20 p-2 peer-checked:border-black'
                     }
                   >
                     {!optionData.color && optionData.name}
@@ -165,6 +139,22 @@ function ItemForm({ product }: ItemFormProps) {
             </div>
           </div>
         ))}
+
+      <input
+        type="number"
+        min={1}
+        max={99}
+        className="w-24 py-2 outline-none border border-primary/20 px-4"
+        {...form.register('quantity', { valueAsNumber: true })}
+      />
+
+      <button
+        type="submit"
+        disabled={!itemIsAvailable}
+        className="font-display uppercase py-2 text-secondary bg-secondary-bg disabled:opacity-50 enabled:cursor-pointer"
+      >
+        Add to cart
+      </button>
     </form>
   )
 }

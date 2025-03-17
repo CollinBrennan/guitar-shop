@@ -1,5 +1,6 @@
 import { ShoppingCart } from '@phosphor-icons/react'
 import { Link } from '@tanstack/react-router'
+import CartDrawer from './cart-drawer'
 
 const links = [
   { name: 'Guitars', to: '/guitars' },
@@ -15,7 +16,11 @@ export default function Navbar() {
       </Link>
       <nav className="flex justify-center gap-12 w-full">
         {links.map((link) => (
-          <Link to={link.to} className="font-display uppercase tracking-widest">
+          <Link
+            key={link.to}
+            to={link.to}
+            className="font-display uppercase tracking-widest"
+          >
             {link.name}
           </Link>
         ))}
@@ -24,9 +29,7 @@ export default function Navbar() {
         <button className="font-display uppercase tracking-widest">
           Sign in
         </button>
-        <Link to="/cart">
-          <ShoppingCart size={24} />
-        </Link>
+        <CartDrawer />
       </div>
     </div>
   )

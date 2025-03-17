@@ -9,6 +9,7 @@ import { createExpressMiddleware } from '@trpc/server/adapters/express'
 import productRouter from './routes/product.route.ts'
 import customProductRouter from './routes/custom-product.route.ts'
 import checkoutRouter from './routes/checkout.route.ts'
+import itemRouter from './routes/item.route.ts'
 
 const app = express()
 
@@ -18,6 +19,7 @@ const corsOptions = {
 
 // trpc
 const appRouter = router({
+  item: itemRouter,
   product: productRouter,
   customProduct: customProductRouter,
   checkout: checkoutRouter,

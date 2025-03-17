@@ -22,4 +22,4 @@ export type Item = Omit<DbItem, 'variant'> & {
 
 export type ItemWithProduct = Item & { product: Product }
 
-export type ItemsWithProductRecord = Record<string, ItemWithProduct>
+export type ItemWithProductRecord = Record<string, ItemWithProduct>

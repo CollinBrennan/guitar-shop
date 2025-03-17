@@ -25,7 +25,7 @@ function RouteComponent() {
     <PageContainer backButton={{ label: 'Continue shopping', to: '/guitars' }}>
       <div className="flex">
         <div className="w-full">
-          <div className="bg-muted-bg w-full aspect-square rounded-4xl"></div>
+          <div className="bg-muted-bg w-full aspect-square"></div>
         </div>
         <div className="w-full">
           <div className="flex flex-col gap-8 px-12">
@@ -33,41 +33,34 @@ function RouteComponent() {
               {product.name}
             </h1>
 
-            <div className="flex flex-col gap-2">
-              <p className="font-display text-4xl uppercase">
-                From {centsToDollars(product.price)}
-              </p>
-              <Link
-                to="/design/$slug"
-                params={{ slug }}
-                className="w-fit font-display uppercase px-8 py-2 text-secondary bg-secondary-bg disabled:opacity-50 enabled:cursor-pointer"
-              >
-                Design your {product.model}
-              </Link>
-            </div>
+            <p className="font-display text-4xl uppercase">
+              From {centsToDollars(product.price)}
+            </p>
+
+            <Link
+              to="/design/$slug"
+              params={{ slug }}
+              className="text-center font-display uppercase py-2 text-secondary bg-secondary-bg disabled:opacity-50 enabled:cursor-pointer"
+            >
+              Design your {product.model}
+            </Link>
 
             <div className="flex flex-col gap-2">
               <h2 className="font-display uppercase font-bold text-2xl">
                 Details
               </h2>
               <p>{product.description}</p>
-            </div>
-
-            {product.specs.length > 0 && (
-              <div className="flex flex-col gap-2">
-                <h2 className="font-display uppercase font-bold text-2xl">
-                  Specs
-                </h2>
+              {product.specs.length > 0 && (
                 <div className="grid grid-cols-2 gap-x-8 gap-y-2 w-fit">
                   {product.specs.map((spec) => (
                     <>
-                      <p className="font-bold">{spec.label}</p>
+                      <h3 className="font-bold font-display">{spec.label}</h3>
                       <p>{spec.body}</p>
                     </>
                   ))}
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>

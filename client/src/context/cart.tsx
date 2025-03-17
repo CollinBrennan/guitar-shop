@@ -1,34 +1,53 @@
-import { createContext, PropsWithChildren, useState } from 'react'
-import { type CartItems } from '@server/schema/checkout.schema'
-import { sortStringify } from '../lib/helpers'
-import { Item } from '@/server/schema/item.schema'
+import { createContext, PropsWithChildren, useContext, useRef } from 'react'
+import { useFieldArray, useForm } from 'react-hook-form'
+import type { Cart } from '@server/schema/checkout.schema'
+import type {
+  ItemWithProductRecord,
+  ItemWithProduct,
+} from '@/server/schema/item.schema'
 
-type CartProviderValue = {
-  cartItems: CartItems
-  incrementItem: (item: Item, increment: number) => void
-}
+const CartContext = createContext<
+  ReturnType<typeof createCartContext> | undefined
+>(undefined)
 
-export const CartContext = createContext({} as CartProviderValue)
+function createCartContext() {
+  const form = useForm<Cart>({
+    defaultValues: { items: [], customItems: [] },
+  })
 
-export function CartProvider({ children }: PropsWithChildren) {
-  const [cartItems, setCartItems] = useState({
-    items: {},
-    customItems: [],
-  } as CartItems)
+  const itemData = useRef<ItemWithProductRecord>({})
 
-  function incrementItem(item: Item, increment: number) {
-    setCartItems((prev) => {
-      const quantity = (prev.items[item.sku]?.quantity || 0) + increment
-      return {
-        items: { ...prev.items, [item.sku]: { quantity } },
-        customItems: prev.customItems,
-      }
-    })
+  const itemsFieldArray = useFieldArray({
+    control: form.control,
+    name: 'items',
+  })
+
+  const cartItems = form.watch()
+
+  function incrementItem(item: ItemWithProduct, increment: number) {
+    const index = cartItems.items.findIndex((field) => field.sku === item.sku)
+    const prev = cartItems.items[index]
+
+    if (prev)
+      form.setValue(`items.${index}.quantity`, prev.quantity + increment)
+    else {
+      itemData.current[item.sku] = item
+      itemsFieldArray.append({ sku: item.sku, quantity: increment })
+    }
   }
 
-  return (
-    <CartContext.Provider value={{ cartItems, incrementItem }}>
-      {children}
-    </CartContext.Provider>
-  )
+  return { form, cartItems, itemsFieldArray, itemData, incrementItem }
+}
+
+export function CartProvider({ children }: PropsWithChildren) {
+  const context = createCartContext()
+
+  return <CartContext.Provider value={context}>{children}</CartContext.Provider>
+}
+
+export function useCart() {
+  const context = useContext(CartContext)
+  if (!context) throw new Error('useCart must be used within a CartProvider')
+
+  return context
 }
