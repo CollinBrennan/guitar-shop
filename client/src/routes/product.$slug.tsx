@@ -49,10 +49,10 @@ function RouteComponent() {
               {product.specs.length > 0 && (
                 <div className="grid grid-cols-2 gap-x-8 gap-y-2 w-fit">
                   {product.specs.map((spec) => (
-                    <div>
+                    <>
                       <h3 className="font-bold font-display">{spec.label}</h3>
                       <p>{spec.body}</p>
-                    </div>
+                    </>
                   ))}
                 </div>
               )}

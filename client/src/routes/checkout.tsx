@@ -35,7 +35,10 @@ function RouteComponent() {
   const options = { fetchClientSecret }
 
   return (
-    <PageContainer heading="Checkout">
+    <PageContainer
+      heading="Checkout"
+      backButton={{ label: 'Continue shopping', to: '/shop' }}
+    >
       <div id="checkout">
         <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
           <EmbeddedCheckout />

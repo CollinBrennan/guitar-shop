@@ -21,7 +21,7 @@ function AboutComponent() {
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-4 gap-4 pt-4">
+      <div className="grid grid-cols-4 gap-2 pt-4">
         {productQuery.data?.map((product) => <ProductCard product={product} />)}
       </div>
     </PageContainer>
