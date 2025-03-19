@@ -39,6 +39,7 @@ async function seed() {
     variantFields: {
       color: {
         name: 'Color',
+        isColor: true,
         options: {
           black: {
             name: 'Black',
@@ -142,6 +143,7 @@ async function seed() {
     variantFields: {
       color: {
         name: 'Color',
+        isColor: true,
         options: {
           black: {
             name: 'Black',
@@ -150,6 +152,14 @@ async function seed() {
           white: {
             name: 'White',
             color: '#FFFFFF',
+          },
+          red: {
+            name: 'Red',
+            color: '#FF0000',
+          },
+          blue: {
+            name: 'Blue',
+            color: '#0000FF',
           },
         },
       },

@@ -6,6 +6,7 @@ const variantFieldsSchema = z.record(
   z.string(), // field value (ex. 'size')
   z.object({
     name: z.string(),
+    isColor: z.boolean().default(false).optional(),
     options: z.record(
       z.string(), // option value (ex. 'small')
       z.object({

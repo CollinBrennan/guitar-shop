@@ -29,32 +29,32 @@ function RouteComponent() {
 
   return (
     <PageContainer backButton={{ label: 'Continue shopping', to: '/shop' }}>
-      <div className="flex">
+      <div className="flex gap-12">
         <div className="w-full">
           <div className="bg-muted-bg w-full aspect-square"></div>
         </div>
-        <div className="w-full">
-          <div className="flex flex-col gap-8 px-12">
+        <div className="w-xs">
+          <div className="flex flex-col gap-8">
             <h1 className="font-display-l uppercase text-5xl">
               {product.name}
             </h1>
 
             <ItemForm product={product} />
 
+            <p>{product.description}</p>
             <div className="flex flex-col gap-2">
-              <h2 className="font-display uppercase font-bold text-2xl">
-                Details
-              </h2>
-              <p>{product.description}</p>
               {product.specs.length > 0 && (
-                <div className="grid grid-cols-2 gap-x-8 gap-y-2 w-fit">
-                  {product.specs.map((spec) => (
-                    <>
-                      <h3 className="font-bold font-display">{spec.label}</h3>
-                      <p>{spec.body}</p>
-                    </>
-                  ))}
-                </div>
+                <>
+                  <h2 className="font-bold text-2xl">Specs</h2>
+                  <div className="grid grid-cols-2 gap-x-8 gap-y-2 w-fit">
+                    {product.specs.map((spec) => (
+                      <>
+                        <h3 className="font-bold">{spec.label}</h3>
+                        <p>{spec.body}</p>
+                      </>
+                    ))}
+                  </div>
+                </>
               )}
             </div>
           </div>
@@ -85,6 +85,8 @@ function ItemForm({ product }: ItemFormProps) {
     resolver: zodResolver(itemFormSchema),
   })
 
+  const variant = form.watch('variant')
+
   const items = createItemMap(product)
   const itemIsAvailable = selectedItem !== undefined
   const itemPrice = itemIsAvailable
@@ -92,8 +94,7 @@ function ItemForm({ product }: ItemFormProps) {
     : 'Out of stock.'
 
   function handleChange() {
-    const variant = sortStringify(form.getValues().variant)
-    setSelectedItem(items[variant])
+    setSelectedItem(items[sortStringify(variant)])
   }
 
   const handleSubmit = form.handleSubmit((data) => {
@@ -111,8 +112,11 @@ function ItemForm({ product }: ItemFormProps) {
 
       {product.variantFields &&
         Object.entries(product.variantFields).map(([field, fieldData]) => (
-          <div key={field} className="flex flex-col gap-2">
-            <h2 className="font-display font-bold">{fieldData.name}</h2>
+          <div key={field} className="flex flex-col gap-1">
+            <h2 className="font-bold">{fieldData.name}</h2>
+            <p>
+              {fieldData.isColor && fieldData.options[variant[field]!]?.name}
+            </p>
             <div className="flex gap-2">
               {Object.entries(fieldData.options).map(([option, optionData]) => (
                 <div key={option} className="relative flex">
@@ -127,9 +131,9 @@ function ItemForm({ product }: ItemFormProps) {
                     htmlFor={`${field}-${option}`}
                     style={{ backgroundColor: optionData.color }}
                     className={
-                      optionData.color
-                        ? 'border border-primary/20 size-6 aspect-square  outline-offset-2 outline-black peer-checked:outline'
-                        : 'border border-primary/20 p-2 peer-checked:border-black'
+                      fieldData.isColor
+                        ? 'rounded-full border border-primary/20 size-6 aspect-square  outline-offset-3 outline-black peer-checked:outline'
+                        : 'border border-primary/20 px-2 py-1 peer-checked:border-black'
                     }
                   >
                     {!optionData.color && optionData.name}
@@ -144,7 +148,7 @@ function ItemForm({ product }: ItemFormProps) {
         type="number"
         min={1}
         max={99}
-        className="w-24 py-2 outline-none border border-primary/20 px-4"
+        className="w-24 py-1 outline-none border border-primary/20 px-4"
         {...form.register('quantity', { valueAsNumber: true })}
       />
 
