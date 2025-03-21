@@ -20,9 +20,20 @@ function RouteComponent() {
   const product = Route.useLoaderData()
 
   return (
-    <PageContainer
-      heading={`design your ${product.model}`}
-      backButton={{ label: 'continue shopping', to: '/guitars' }}
-    ></PageContainer>
+    <main className="h-screen bg-muted-bg">
+      <div className="w-full flex justify-between items-center py-12 px-12">
+        <h1 className="font-display-l uppercase text-5xl">
+          Design your {product.model}
+        </h1>
+        <div>
+          <button
+            type="submit"
+            className="font-display uppercase py-2 px-8 text-secondary bg-secondary-bg disabled:opacity-50 enabled:cursor-pointer"
+          >
+            Finish
+          </button>
+        </div>
+      </div>
+    </main>
   )
 }

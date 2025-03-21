@@ -5,6 +5,11 @@ import type {
   ItemWithProductRecord,
   ItemWithProduct,
 } from '@/server/schema/item.schema'
+import {
+  CustomChoices,
+  CustomProduct,
+  CustomProductRecord,
+} from '@/server/schema/custom-product.schema'
 
 const CartContext = createContext<
   ReturnType<typeof createCartContext> | undefined
@@ -16,10 +21,16 @@ function createCartContext() {
   })
 
   const itemData = useRef<ItemWithProductRecord>({})
+  const customProductData = useRef<CustomProductRecord>({})
 
   const itemsFieldArray = useFieldArray({
     control: form.control,
     name: 'items',
+  })
+
+  const customItemsFieldArray = useFieldArray({
+    control: form.control,
+    name: 'customItems',
   })
 
   const cartItems = form.watch()
@@ -36,7 +47,24 @@ function createCartContext() {
     }
   }
 
-  return { form, cartItems, itemsFieldArray, itemData, incrementItem }
+  function incrementCustomItem(
+    item: CustomProduct,
+    customChoices: CustomChoices
+  ) {
+    customProductData.current[item.sku] = item
+    customItemsFieldArray.append({ sku: item.sku, customChoices })
+  }
+
+  return {
+    form,
+    cartItems,
+    itemsFieldArray,
+    customItemsFieldArray,
+    itemData,
+    customProductData,
+    incrementItem,
+    incrementCustomItem,
+  }
 }
 
 export function CartProvider({ children }: PropsWithChildren) {
