@@ -49,3 +49,5 @@ export type CustomProduct = Omit<
   customFields: CustomFields
   customDefaults: CustomChoices
 }
+
+export type CustomProductRecord = Record<string, CustomProduct>

@@ -87,7 +87,7 @@ function CartItemForm({ setIsOpen }: CartItemFormProps) {
       className="flex flex-col h-full overflow-y-hidden"
     >
       <div className="flex flex-col gap-8 h-full overflow-y-auto pb-8">
-        {items.length === 0 && 'No items in cart.'}
+        {items.length === 0 && customItems.length === 0 && 'No items in cart.'}
         {items.map((cartItem, index) => {
           const item = itemData.current[cartItem.sku]
           if (!item) return 'Item not found.'
@@ -137,6 +137,8 @@ function CartItemForm({ setIsOpen }: CartItemFormProps) {
           <span>{centsToDollars(subtotal)}</span>
         </Link>
       </div>
+
+      <button type="submit">THING</button>
     </form>
   )
 }

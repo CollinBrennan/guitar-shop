@@ -7,7 +7,11 @@ import { z } from 'zod'
 const checkoutRouter = router({
   create: cartProcedure.mutation(async ({ ctx, input }) => {
     try {
-      const lineItems = lineItemsFromCart(input, ctx.items)
+      const lineItems = lineItemsFromCart(
+        input,
+        ctx.itemData,
+        ctx.customProductData
+      )
 
       const session = await stripe.checkout.sessions.create({
         ui_mode: 'embedded',

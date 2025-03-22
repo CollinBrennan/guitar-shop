@@ -1,26 +1,32 @@
 import type { Cart } from '../schema/checkout.schema.ts'
 import type {
+  CustomChoices,
+  CustomFields,
+  CustomProductRecord,
+} from '../schema/custom-product.schema.ts'
+import type {
   ItemWithProduct,
   ItemWithProductRecord,
 } from '../schema/item.schema.ts'
 
 export function lineItemsFromCart(
   cartItems: Cart,
-  itemData: ItemWithProductRecord
+  itemData: ItemWithProductRecord,
+  customProductData: CustomProductRecord
 ) {
-  const lineItems = cartItems.items.map((cartItem) => {
-    const item = itemData[cartItem.sku]
+  const items = cartItems.items.map((item) => {
+    const data = itemData[item.sku]
 
-    if (!item) throw new Error(`Invalid item SKU: '${cartItem.sku}'`)
+    if (!data) throw new Error(`Invalid item SKU: '${item.sku}'`)
 
     return {
       price_data: {
-        unit_amount: item.price,
+        unit_amount: data.price,
         currency: 'usd',
         product_data: {
-          description: createItemDescription(item),
-          name: item.product.name,
-          images: item.product.imageUrl ? [item.product.imageUrl] : [],
+          description: createItemDescription(data),
+          name: data.product.name,
+          images: data.product.imageUrl ? [data.product.imageUrl] : [],
         },
       },
       adjustable_quantity: {
@@ -28,11 +34,38 @@ export function lineItemsFromCart(
         minimum: 0,
         maximum: 99,
       },
-      quantity: cartItem.quantity,
+      quantity: item.quantity,
     }
   })
 
-  return lineItems
+  const customItems = cartItems.customItems.map((item) => {
+    const data = customProductData[item.sku]
+
+    if (!data) throw new Error(`Invalid custom item SKU: '${item.sku}'`)
+
+    return {
+      price_data: {
+        unit_amount: data.price,
+        currency: 'usd',
+        product_data: {
+          description: createCustomItemDescription(
+            data.customFields,
+            item.customChoices
+          ),
+          name: data.name,
+          images: data.imageUrl ? [data.imageUrl] : [],
+        },
+      },
+      adjustable_quantity: {
+        enabled: true,
+        minimum: 0,
+        maximum: 99,
+      },
+      quantity: 1,
+    }
+  })
+
+  return [...items, ...customItems]
 }
 
 function createItemDescription(item: ItemWithProduct) {
@@ -48,6 +81,13 @@ function createItemDescription(item: ItemWithProduct) {
   }, '')
 
   return description || undefined
+}
+
+function createCustomItemDescription(
+  fields: CustomFields,
+  choices: CustomChoices
+) {
+  return JSON.stringify(choices)
 }
 
 // function priceFromCustomChoices(

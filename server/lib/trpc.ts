@@ -5,6 +5,7 @@ import { Role } from '@prisma/client'
 import type { CreateExpressContextOptions } from '@trpc/server/adapters/express'
 import { cartSchema } from '../schema/checkout.schema.ts'
 import { getItemDataFromCart } from '../actions/item.actions.ts'
+import { getCustomProductDataFromCart } from '../actions/custom-product.actions.ts'
 
 export const createContext = async (opts: CreateExpressContextOptions) => {
   const session = await getSession(opts.req, authConfig)
@@ -39,12 +40,16 @@ export const adminProcedure = authProcedure.use((opts) => {
 
 export const cartProcedure = procedure.input(cartSchema).use(async (opts) => {
   const cartItems = opts.input
-  const items = await getItemDataFromCart(cartItems)
+  const itemData = await getItemDataFromCart(cartItems)
+  const customProductData = await getCustomProductDataFromCart(cartItems)
 
-  if (Object.keys(items).length === 0)
+  if (
+    Object.keys(itemData).length === 0 &&
+    Object.keys(customProductData).length === 0
+  )
     throw new TRPCError({ code: 'BAD_REQUEST', message: 'Cart is empty' })
 
   return opts.next({
-    ctx: { items },
+    ctx: { itemData, customProductData },
   })
 })
