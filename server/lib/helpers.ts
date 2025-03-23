@@ -43,9 +43,15 @@ export function lineItemsFromCart(
 
     if (!data) throw new Error(`Invalid custom item SKU: '${item.sku}'`)
 
+    const price = createCustomProductPrice(
+      data.price,
+      data.customFields,
+      item.customChoices
+    )
+
     return {
       price_data: {
-        unit_amount: data.price,
+        unit_amount: price,
         currency: 'usd',
         product_data: {
           description: createCustomItemDescription(
@@ -90,22 +96,22 @@ function createCustomItemDescription(
   return JSON.stringify(choices)
 }
 
-// function priceFromCustomChoices(
-//   basePrice: number,
-//   customChoices: CustomChoices,
-//   customFields: CustomFields
-// ) {
-//   const entries = Object.entries(customFields)
-//   const price = entries.reduce((acc, [field, fieldData]) => {
-//     const choice = customChoices[field]
-//     if (!choice) throw new Error(`Missing custom item choice: ${field}`)
+export function createCustomProductPrice(
+  basePrice: number,
+  fields: CustomFields,
+  choices: CustomChoices
+) {
+  const entries = Object.entries(fields)
+  const price = entries.reduce((acc, [field, fieldData]) => {
+    const choice = choices[field]
+    if (!choice) throw new Error(`Missing custom item choice: ${field}`)
 
-//     const option = fieldData.options[choice]
-//     if (!option)
-//       throw new Error(`Invalid custom item choice for '${field}': ${choice}`)
+    const option = fieldData.options[choice]
+    if (!option)
+      throw new Error(`Invalid custom item choice for '${field}': ${choice}`)
 
-//     return acc + option.fee
-//   }, basePrice)
+    return acc + option.fee
+  }, basePrice)
 
-//   return price
-// }
+  return price
+}

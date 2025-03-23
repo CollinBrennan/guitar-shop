@@ -7,14 +7,14 @@ import {
 import { ShoppingCart, X } from '@phosphor-icons/react'
 import { useState } from 'react'
 import { useCart } from '../context/cart'
-import { centsToDollars } from '../lib/helpers'
-import { Link } from '@tanstack/react-router'
+import { centsToDollars, createCustomProductPrice } from '../lib/helpers'
 import { ItemWithProduct } from '@/server/schema/item.schema'
 import { UseFormRegisterReturn } from 'react-hook-form'
 import {
   CustomChoices,
   CustomProduct,
 } from '@/server/schema/custom-product.schema'
+import { useNavigate } from '@tanstack/react-router'
 
 export default function CartDrawer() {
   const [isOpen, setIsOpen] = useState(false)
@@ -64,12 +64,17 @@ function CartItemForm({ setIsOpen }: CartItemFormProps) {
     customProductData,
   } = useCart()
 
-  const onSubmit = form.handleSubmit((data) => {
-    console.log(data)
+  const navigate = useNavigate()
+
+  const onSubmit = form.handleSubmit(() => {
+    setIsOpen(false)
+    navigate({ to: '/checkout' })
   })
 
   const items = cartItems.items
   const customItems = cartItems.customItems
+
+  const cartIsEmpty = items.length === 0 && customItems.length === 0
 
   const itemSubtotal = items.reduce((subtotal, item) => {
     const data = itemData.current[item.sku]
@@ -77,7 +82,14 @@ function CartItemForm({ setIsOpen }: CartItemFormProps) {
   }, 0)
   const customItemSubtotal = customItems.reduce((subtotal, item) => {
     const data = customProductData.current[item.sku]
-    return subtotal + (data ? data.price : 0)
+    const price = data
+      ? createCustomProductPrice(
+          data.price,
+          data.customFields,
+          item.customChoices
+        )
+      : 0
+    return subtotal + price
   }, 0)
   const subtotal = itemSubtotal + customItemSubtotal
 
@@ -87,7 +99,7 @@ function CartItemForm({ setIsOpen }: CartItemFormProps) {
       className="flex flex-col h-full overflow-y-hidden"
     >
       <div className="flex flex-col gap-8 h-full overflow-y-auto pb-8">
-        {items.length === 0 && customItems.length === 0 && 'No items in cart.'}
+        {cartIsEmpty && 'No items in cart.'}
         {items.map((cartItem, index) => {
           const item = itemData.current[cartItem.sku]
           if (!item) return 'Item not found.'
@@ -128,17 +140,15 @@ function CartItemForm({ setIsOpen }: CartItemFormProps) {
       <div className="flex flex-col justify-end gap-4">
         <hr className="text-muted" />
         <p className="text-muted">Taxes and shipping calculated at checkout</p>
-        <Link
-          to="/checkout"
-          onClick={() => setIsOpen(false)}
+        <button
+          type="submit"
+          disabled={cartIsEmpty}
           className="flex justify-center gap-2 w-full font-display uppercase px-8 py-2 text-secondary bg-secondary-bg"
         >
           <span>Checkout</span>
-          <span>{centsToDollars(subtotal)}</span>
-        </Link>
+          {!cartIsEmpty && <span>{centsToDollars(subtotal)}</span>}
+        </button>
       </div>
-
-      <button type="submit">THING</button>
     </form>
   )
 }
