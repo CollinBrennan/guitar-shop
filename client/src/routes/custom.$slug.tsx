@@ -1,16 +1,18 @@
 import { createFileRoute, Link, notFound } from '@tanstack/react-router'
 import PageContainer from '../components/page-container'
 import { queryClient, trpc } from '../lib/trpc'
-import { centsToDollars } from '../lib/helpers'
+import {
+  centsToDollars,
+  getCustomChoicesFromParams,
+  stripCustomChoices,
+} from '../lib/helpers'
 import { PencilSimple } from '@phosphor-icons/react'
 import { useForm } from 'react-hook-form'
 import {
-  CustomChoices,
   customChoicesSchema,
   CustomProduct,
 } from '@/server/schema/custom-product.schema'
 import { zodValidator } from '@tanstack/zod-adapter'
-import { z } from 'zod'
 import { useCart } from '../context/cart'
 
 export const Route = createFileRoute('/custom/$slug')({
@@ -77,16 +79,8 @@ function CustomProductForm({ product }: CustomProductFormProps) {
   const { slug } = Route.useParams()
   const params = Route.useSearch()
 
-  // only set choices from params if they are valid
-  const customChoices = Object.entries(params).filter(
-    ([field, choice]) => product.customFields[field]?.options[choice]
-  )
-
   const form = useForm({
-    defaultValues: {
-      ...product.customDefaults,
-      ...Object.fromEntries(customChoices),
-    },
+    defaultValues: getCustomChoicesFromParams(product, params),
   })
 
   const handleSubmit = form.handleSubmit((data) => {
@@ -105,6 +99,7 @@ function CustomProductForm({ product }: CustomProductFormProps) {
         <Link
           to="/design/$slug"
           params={{ slug }}
+          search={stripCustomChoices(product, form.getValues())}
           className="w-full flex justify-center items-center gap-2 font-display uppercase py-2 text-black bg-linear-to-r from-pink-100 to-cyan-100 disabled:opacity-50 enabled:cursor-pointer"
         >
           <span>Edit your {product.model}</span>

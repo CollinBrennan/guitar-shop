@@ -14,7 +14,7 @@ import {
   CustomChoices,
   CustomProduct,
 } from '@/server/schema/custom-product.schema'
-import { useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 
 export default function CartDrawer() {
   const [isOpen, setIsOpen] = useState(false)
@@ -124,7 +124,13 @@ function CartItemForm({ setIsOpen }: CartItemFormProps) {
           const item = customProductData.current[cartItem.sku]
           if (!item) return 'Item not found.'
 
-          const price = centsToDollars(item.price)
+          const price = centsToDollars(
+            createCustomProductPrice(
+              item.price,
+              item.customFields,
+              cartItem.customChoices
+            )
+          )
 
           return (
             <CustomItemComponent
@@ -228,7 +234,7 @@ function CustomItemComponent({
           {JSON.stringify(customChoices, null, 2)}
         </pre>
 
-        <div>
+        <div className="flex w-full gap-4 items-center">
           <button
             type="button"
             onClick={remove}

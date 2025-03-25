@@ -1,6 +1,7 @@
 import {
   CustomChoices,
   CustomFields,
+  CustomProduct,
 } from '@/server/schema/custom-product.schema'
 
 export function centsToDollars(cents: number) {
@@ -34,4 +35,33 @@ export function createCustomProductPrice(
   }, basePrice)
 
   return price
+}
+
+export function getCustomChoicesFromParams(
+  product: CustomProduct,
+  params: CustomChoices
+) {
+  const customChoices = Object.entries(params).filter(
+    ([field, choice]) => product.customFields[field]?.options[choice]
+  )
+
+  return {
+    ...product.customDefaults,
+    ...Object.fromEntries(customChoices),
+  }
+}
+
+export function stripCustomChoices(
+  product: CustomProduct,
+  choices: CustomChoices
+): CustomChoices {
+  const stripped = Object.entries(choices).reduce(
+    (acc, [field, choice]) =>
+      product.customDefaults[field] === choice
+        ? acc
+        : { ...acc, [field]: choice },
+    {}
+  )
+
+  return stripped
 }
