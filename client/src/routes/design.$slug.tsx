@@ -6,6 +6,7 @@ import { customChoicesSchema } from '@/server/schema/custom-product.schema'
 import { zodValidator } from '@tanstack/zod-adapter'
 import {
   centsToDollars,
+  centsToDollarsCustom,
   centsToDollarsRounded,
   createCustomProductPrice,
   getCustomChoicesFromParams,
@@ -41,7 +42,7 @@ function RouteComponent() {
   const form = useForm({ defaultValues })
   const customChoices = form.watch()
 
-  const price = createCustomProductPrice(
+  const price = centsToDollarsCustom(
     product.price,
     product.customFields,
     customChoices
@@ -74,7 +75,7 @@ function RouteComponent() {
             <h1 className="font-display-l uppercase text-5xl">
               Design your {product.model}
             </h1>
-            <h2 className="font-display text-3xl">{centsToDollars(price)}</h2>
+            <h2 className="font-display text-3xl">{price}</h2>
           </div>
           <div>
             <button
@@ -126,12 +127,12 @@ function RouteComponent() {
                     className={
                       fieldData.isColor
                         ? 'absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-8 hidden'
-                        : 'flex justify-between gap-8'
+                        : 'flex justify-between gap-4'
                     }
                   >
                     <span>{optionData.name}</span>
                     {optionData.fee > 0 && (
-                      <span>{centsToDollarsRounded(optionData.fee)}</span>
+                      <span>+{centsToDollarsRounded(optionData.fee)}</span>
                     )}
                   </span>
                 </label>

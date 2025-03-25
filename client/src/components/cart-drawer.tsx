@@ -230,9 +230,16 @@ function CustomItemComponent({
 
         <div className="font-display">{price}</div>
 
-        <pre className="leading-4 text-muted text-xs uppercase">
-          {JSON.stringify(customChoices, null, 2)}
-        </pre>
+        <p className="grid grid-cols-2 leading-4 text-muted text-xs uppercase">
+          {Object.entries(customChoices).map(([field, choice]) => (
+            <>
+              <span className="font-bold">
+                {item.customFields[field]?.name}
+              </span>
+              <span>{item.customFields[field]?.options[choice]?.name}</span>
+            </>
+          ))}
+        </p>
 
         <div className="flex w-full gap-4 items-center">
           <button

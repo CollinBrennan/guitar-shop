@@ -3,6 +3,8 @@ import PageContainer from '../components/page-container'
 import { queryClient, trpc } from '../lib/trpc'
 import {
   centsToDollars,
+  centsToDollarsCustom,
+  createCustomProductPrice,
   getCustomChoicesFromParams,
   stripCustomChoices,
 } from '../lib/helpers'
@@ -52,7 +54,7 @@ function RouteComponent() {
               {product.specs.length > 0 && (
                 <>
                   <h2 className="font-bold text-2xl">Specs</h2>
-                  <div className="grid grid-cols-2 gap-x-8 gap-y-2 w-fit">
+                  <div className="grid grid-cols-2 gap-x-8 gap-y-2">
                     {product.specs.map((spec) => (
                       <>
                         <h3 className="font-bold">{spec.label}</h3>
@@ -83,17 +85,29 @@ function CustomProductForm({ product }: CustomProductFormProps) {
     defaultValues: getCustomChoicesFromParams(product, params),
   })
 
+  const customChoices = form.watch()
+  const price = centsToDollarsCustom(
+    product.price,
+    product.customFields,
+    customChoices
+  )
+
   const handleSubmit = form.handleSubmit((data) => {
     cart.incrementCustomItem(product, data)
   })
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-      <p className="font-display text-4xl uppercase">
-        {centsToDollars(product.price)}
-      </p>
+      <p className="font-display text-4xl uppercase">{price}</p>
 
-      <pre>{JSON.stringify(form.getValues(), null, 2)}</pre>
+      <div className="grid grid-cols-2 gap-x-8 gap-y-2 w-full">
+        {Object.entries(customChoices).map(([field, choice]) => (
+          <>
+            <h3 className="font-bold">{product.customFields[field]?.name}</h3>
+            <p>{product.customFields[field]?.options[choice]?.name}</p>
+          </>
+        ))}
+      </div>
 
       <div className="flex flex-col gap-2">
         <Link

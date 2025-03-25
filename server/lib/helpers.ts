@@ -93,7 +93,19 @@ function createCustomItemDescription(
   fields: CustomFields,
   choices: CustomChoices
 ) {
-  return JSON.stringify(choices)
+  const entries = Object.entries(choices)
+
+  const description = entries.reduce((acc, [field, choice]) => {
+    const fieldData = fields[field]
+    const choiceData = fieldData?.options[choice]
+    if (!fieldData || !choiceData) return acc
+
+    const str = `${fieldData.name}: ${choiceData.name}`
+
+    return `${acc}${acc === '' ? str : ` / ${str}`}`
+  }, '')
+
+  return description || undefined
 }
 
 export function createCustomProductPrice(

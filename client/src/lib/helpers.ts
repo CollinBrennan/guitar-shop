@@ -12,11 +12,20 @@ export function centsToDollarsRounded(cents: number) {
   return `$${Math.ceil(cents / 100)}`
 }
 
+export function centsToDollarsCustom(
+  basePrice: number,
+  fields: CustomFields,
+  choices: CustomChoices
+) {
+  return centsToDollars(createCustomProductPrice(basePrice, fields, choices))
+}
+
 // sort keys of object before stringifying so we can safely use them as keys
 export function sortStringify(obj: Object) {
   return JSON.stringify(obj, Object.keys(obj).sort())
 }
 
+// returns price in cents
 export function createCustomProductPrice(
   basePrice: number,
   fields: CustomFields,
