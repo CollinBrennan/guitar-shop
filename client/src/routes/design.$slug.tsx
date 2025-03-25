@@ -6,6 +6,7 @@ import { customChoicesSchema } from '@/server/schema/custom-product.schema'
 import { zodValidator } from '@tanstack/zod-adapter'
 import {
   centsToDollars,
+  centsToDollarsRounded,
   createCustomProductPrice,
   getCustomChoicesFromParams,
   stripCustomChoices,
@@ -100,9 +101,9 @@ function RouteComponent() {
               <CaretRight size={24} weight="bold" />
             </button>
           </div>
-          <div className="flex gap-2">
+          <div className={`flex ${fieldData.isColor ? 'gap-4' : 'gap-2'}`}>
             {Object.entries(fieldData.options).map(([option, optionData]) => (
-              <div key={option} className="relative flex">
+              <div key={option} className="group relative flex">
                 <input
                   id={`${field}-${option}`}
                   type="radio"
@@ -112,11 +113,27 @@ function RouteComponent() {
                 />
                 <label
                   htmlFor={`${field}-${option}`}
+                  style={{
+                    backgroundColor: fieldData.isColor ? optionData.color : '',
+                  }}
                   className={
-                    'border border-primary/20 px-8 py-2 rounded-full peer-checked:border-black'
+                    fieldData.isColor
+                      ? 'rounded-full border border-primary/20 size-8 aspect-square outline-offset-4 outline-black peer-checked:*:block peer-checked:outline'
+                      : 'border border-primary/20 px-8 py-2 rounded-full peer-checked:border-black'
                   }
                 >
-                  {optionData.name}
+                  <span
+                    className={
+                      fieldData.isColor
+                        ? 'absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-8 hidden'
+                        : 'flex justify-between gap-8'
+                    }
+                  >
+                    <span>{optionData.name}</span>
+                    {optionData.fee > 0 && (
+                      <span>{centsToDollarsRounded(optionData.fee)}</span>
+                    )}
+                  </span>
                 </label>
               </div>
             ))}

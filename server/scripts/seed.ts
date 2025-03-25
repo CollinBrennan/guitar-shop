@@ -214,10 +214,37 @@ async function seed() {
           stainlessSteel: { name: 'Stainless Steel', fee: 5000 },
         },
       },
+      color: {
+        name: 'Color',
+        isColor: true,
+        options: {
+          black: {
+            name: 'Black',
+            color: '#000000',
+            fee: 0,
+          },
+          white: {
+            name: 'White',
+            color: '#FFFFFF',
+            fee: 0,
+          },
+          red: {
+            name: 'Red',
+            color: '#FF0000',
+            fee: 0,
+          },
+          blue: {
+            name: 'Blue',
+            color: '#0000FF',
+            fee: 0,
+          },
+        },
+      },
     },
     customDefaults: {
       bodyWood: 'alder',
       frets: 'standard',
+      color: 'blue',
     },
   })
 

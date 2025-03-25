@@ -6,6 +6,7 @@ const customFieldsSchema = z.record(
   z.string(), // field value (ex. 'wood')
   z.object({
     name: z.string(),
+    isColor: z.boolean().default(false).optional(),
     options: z.record(
       z.string(), // option value (ex. 'alder')
       z.object({
