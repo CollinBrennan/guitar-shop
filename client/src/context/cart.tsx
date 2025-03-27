@@ -1,4 +1,10 @@
-import { createContext, PropsWithChildren, useContext, useRef } from 'react'
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useRef,
+} from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import type { Cart } from '@server/schema/checkout.schema'
 import type {
@@ -10,16 +16,24 @@ import {
   CustomProduct,
   CustomProductRecord,
 } from '@/server/schema/custom-product.schema'
+import { useQuery } from '@tanstack/react-query'
+import { trpc } from '../lib/trpc'
 
 const CartContext = createContext<
   ReturnType<typeof createCartContext> | undefined
 >(undefined)
 
 function createCartContext() {
-  const form = useForm<Cart>({
-    defaultValues: { items: [], customItems: [] },
-  })
+  const localCartItems = localStorage.getItem('cartItems')
+  const defaultValues = localCartItems
+    ? JSON.parse(localCartItems)
+    : { items: [], customItems: [] }
 
+  const form = useForm<Cart>({ defaultValues })
+
+  const { data } = useQuery(
+    trpc.item.listWithProductFromCart.queryOptions(defaultValues)
+  )
   const itemData = useRef<ItemWithProductRecord>({})
   const customProductData = useRef<CustomProductRecord>({})
 
@@ -34,6 +48,21 @@ function createCartContext() {
   })
 
   const cartItems = form.watch()
+
+  console.log(cartItems)
+
+  useEffect(() => {
+    itemData.current = { ...itemData.current, ...data?.itemData }
+    customProductData.current = {
+      ...customProductData.current,
+      ...data?.customProductData,
+    }
+  }, [data])
+
+  useEffect(
+    () => localStorage.setItem('cartItems', JSON.stringify(cartItems)),
+    [cartItems]
+  )
 
   function incrementItem(item: ItemWithProduct, increment: number) {
     const index = cartItems.items.findIndex((field) => field.sku === item.sku)
