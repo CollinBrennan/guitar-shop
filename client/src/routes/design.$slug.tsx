@@ -13,6 +13,7 @@ import {
   stripCustomChoices,
 } from '../lib/helpers'
 import { useState } from 'react'
+import Button from '../components/button'
 
 export const Route = createFileRoute('/design/$slug')({
   component: RouteComponent,
@@ -78,12 +79,12 @@ function RouteComponent() {
             <h2 className="font-display text-3xl">{price}</h2>
           </div>
           <div>
-            <button
+            <Button
               type="submit"
               className="font-display uppercase py-2 px-8 text-secondary bg-secondary-bg disabled:opacity-50 enabled:cursor-pointer"
             >
               Finish
-            </button>
+            </Button>
           </div>
         </div>
         <div className="flex-1" />

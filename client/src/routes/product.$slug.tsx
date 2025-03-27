@@ -9,6 +9,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useCart } from '../context/cart'
 import { Item } from '@/server/schema/item.schema'
+import Button from '../components/button'
 
 export const Route = createFileRoute('/product/$slug')({
   component: RouteComponent,
@@ -29,13 +30,21 @@ function RouteComponent() {
 
   return (
     <PageContainer backButton={{ label: 'Continue shopping', to: '/shop' }}>
-      <div className="flex gap-12">
-        <div className="w-full">
-          <div className="bg-muted-bg w-full aspect-square"></div>
+      <div className="flex flex-col md:flex-row gap-12">
+        <div className="grid reverse grid-cols-2 w-full gap-2">
+          <div className="bg-muted-bg w-full aspect-square">0</div>
+          {[1, 2, 3].map((numba) => (
+            <div
+              style={{ order: numba }}
+              className="bg-muted-bg w-full aspect-square"
+            >
+              {numba}
+            </div>
+          ))}
         </div>
-        <div className="w-xs">
+        <div className="max-w-192">
           <div className="flex flex-col gap-8">
-            <h1 className="font-display-l uppercase text-5xl">
+            <h1 className="font-display-l uppercase text-5xl break-words">
               {product.name}
             </h1>
 
@@ -152,13 +161,9 @@ function ItemForm({ product }: ItemFormProps) {
         {...form.register('quantity', { valueAsNumber: true })}
       />
 
-      <button
-        type="submit"
-        disabled={!itemIsAvailable}
-        className="font-display uppercase py-2 text-secondary bg-secondary-bg disabled:opacity-50 enabled:cursor-pointer"
-      >
+      <Button disabled={!itemIsAvailable} type="submit">
         Add to cart
-      </button>
+      </Button>
     </form>
   )
 }

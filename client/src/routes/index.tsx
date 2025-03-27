@@ -1,5 +1,5 @@
-import { createFileRoute } from '@tanstack/react-router'
-import PageContainer from '../components/page-container'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { CaretRight } from '@phosphor-icons/react'
 
 export const Route = createFileRoute('/')({
   component: HomeComponent,
@@ -16,13 +16,14 @@ function HomeComponent() {
             your
           </span>
           <br />
-          <span className="font-brand text-[16vw] leading-[5vw] translate-x-[1vw]">
+          <span className="select-none font-brand text-[16vw] leading-[5vw] translate-x-[1vw]">
             Canvas
           </span>
-          <div className="pt-[5vw]">
-            <button className="font-display uppercase px-8 py-2 text-secondary bg-secondary-bg">
-              Design your guitar
-            </button>
+          <div className="pt-[5vw] z-10">
+            <Link to="/guitars" className="flex items-center justify-end">
+              <span className="font-display uppercase">SHOP GUITARS</span>
+              <CaretRight size={20}></CaretRight>
+            </Link>
           </div>
         </div>
         <div></div>

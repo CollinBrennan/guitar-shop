@@ -2,9 +2,7 @@ import { createFileRoute, Link, notFound } from '@tanstack/react-router'
 import PageContainer from '../components/page-container'
 import { queryClient, trpc } from '../lib/trpc'
 import {
-  centsToDollars,
   centsToDollarsCustom,
-  createCustomProductPrice,
   getCustomChoicesFromParams,
   stripCustomChoices,
 } from '../lib/helpers'
@@ -16,6 +14,7 @@ import {
 } from '@/server/schema/custom-product.schema'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { useCart } from '../context/cart'
+import Button from '../components/button'
 
 export const Route = createFileRoute('/custom/$slug')({
   component: RouteComponent,
@@ -119,12 +118,7 @@ function CustomProductForm({ product }: CustomProductFormProps) {
           <span>Edit your {product.model}</span>
           <PencilSimple size={16} />
         </Link>
-        <button
-          type="submit"
-          className="w-full font-display uppercase py-2 text-secondary bg-secondary-bg disabled:opacity-50 enabled:cursor-pointer"
-        >
-          Add to cart
-        </button>
+        <Button type="submit">Add to cart</Button>
       </div>
     </form>
   )

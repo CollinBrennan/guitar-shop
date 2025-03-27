@@ -1,4 +1,4 @@
-import { ShoppingCart } from '@phosphor-icons/react'
+import { ShoppingCart, UserCircle } from '@phosphor-icons/react'
 import { Link } from '@tanstack/react-router'
 import CartDrawer from './cart-drawer'
 
@@ -10,8 +10,8 @@ const links = [
 
 export default function Navbar() {
   return (
-    <div className="flex w-full px-12 py-4 items-center">
-      <Link to="/" className="font-brand text-6xl w-full">
+    <div className="bg-secondary-bg  text-secondary flex w-full px-12 py-4 items-center">
+      <Link to="/" className="font-brand text-5xl w-full">
         Canvas Guitars
       </Link>
       <nav className="flex justify-center gap-12 w-full">
@@ -25,10 +25,10 @@ export default function Navbar() {
           </Link>
         ))}
       </nav>
-      <div className="flex justify-end items-center gap-12 w-full">
-        <button className="font-display uppercase tracking-widest">
-          Sign in
-        </button>
+      <div className="flex justify-end items-center gap-4 w-full">
+        <Link to="/signin">
+          <UserCircle size={24} />
+        </Link>
         <CartDrawer />
       </div>
     </div>

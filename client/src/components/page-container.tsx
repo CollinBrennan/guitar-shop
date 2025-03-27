@@ -13,7 +13,7 @@ export default function PageContainer({
   children,
 }: Props) {
   return (
-    <main className="w-full max-w-[1440px] px-12 mx-auto">
+    <main className="w-full px-12 mx-auto">
       <div className="flex flex-col gap-4 pt-12 pb-8">
         {backButton && (
           <Link to={backButton.to} className="flex items-center">

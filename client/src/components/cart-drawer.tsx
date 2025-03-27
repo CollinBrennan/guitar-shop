@@ -14,7 +14,8 @@ import {
   CustomChoices,
   CustomProduct,
 } from '@/server/schema/custom-product.schema'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router'
+import Button from './button'
 
 export default function CartDrawer() {
   const [isOpen, setIsOpen] = useState(false)
@@ -146,14 +147,12 @@ function CartItemForm({ setIsOpen }: CartItemFormProps) {
       <div className="flex flex-col justify-end gap-4">
         <hr className="text-muted" />
         <p className="text-muted">Taxes and shipping calculated at checkout</p>
-        <button
-          type="submit"
-          disabled={cartIsEmpty}
-          className="flex justify-center gap-2 w-full font-display uppercase px-8 py-2 text-secondary bg-secondary-bg"
-        >
+        <Button type="submit" disabled={cartIsEmpty}>
           <span>Checkout</span>
-          {!cartIsEmpty && <span>{centsToDollars(subtotal)}</span>}
-        </button>
+          {!cartIsEmpty && (
+            <span className="pl-4">{centsToDollars(subtotal)}</span>
+          )}
+        </Button>
       </div>
     </form>
   )
