@@ -26,7 +26,7 @@ export function lineItemsFromCart(
         product_data: {
           description: createItemDescription(data),
           name: data.product.name,
-          images: data.product.imageUrl ? [data.product.imageUrl] : [],
+          images: [data.imageUrl],
         },
       },
       adjustable_quantity: {

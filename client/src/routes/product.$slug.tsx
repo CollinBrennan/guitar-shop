@@ -27,20 +27,22 @@ export const Route = createFileRoute('/product/$slug')({
 
 function RouteComponent() {
   const product = Route.useLoaderData()
+  const [selectedItem, setSelectedItem] = useState(product.items[0])
 
   return (
     <PageContainer backButton={{ label: 'Continue shopping', to: '/shop' }}>
       <div className="flex flex-col sm:flex-row gap-12">
-        <div className="grid reverse grid-cols-2 w-full gap-2">
-          <div className="bg-muted-bg w-full aspect-square">0</div>
-          {[1, 2, 3].map((numba) => (
-            <div
-              style={{ order: numba }}
-              className="bg-muted-bg w-full aspect-square"
-            >
-              {numba}
-            </div>
-          ))}
+        <div className="grid grid-cols-2 w-full h-full gap-2">
+          {selectedItem &&
+            selectedItem.galleryUrls.map((url) => (
+              <div className="bg-muted-bg w-full aspect-square">
+                <img
+                  src={url}
+                  alt={product.name}
+                  className="w-full aspect-square object-contain"
+                />
+              </div>
+            ))}
         </div>
         <div className="w-full max-w-160">
           <div className="flex flex-col gap-8">
@@ -48,7 +50,11 @@ function RouteComponent() {
               {product.name}
             </h1>
 
-            <ItemForm product={product} />
+            <ItemForm
+              product={product}
+              selectedItem={selectedItem}
+              setSelectedItem={setSelectedItem}
+            />
 
             <p>{product.description}</p>
             <div className="flex flex-col gap-2">
@@ -73,23 +79,23 @@ function RouteComponent() {
   )
 }
 
-type ItemFormProps = {
-  product: ProductWithItems
-}
-
 const itemFormSchema = z.object({
   variant: z.record(z.string(), z.string()),
   quantity: z.number().int().positive().max(99),
 })
 
-type ItemForm = z.infer<typeof itemFormSchema>
+type ItemFormSchema = z.infer<typeof itemFormSchema>
 
-function ItemForm({ product }: ItemFormProps) {
+type ItemFormProps = {
+  product: ProductWithItems
+  selectedItem: Item | undefined
+  setSelectedItem: React.Dispatch<React.SetStateAction<Item | undefined>>
+}
+
+function ItemForm({ product, selectedItem, setSelectedItem }: ItemFormProps) {
   const cart = useCart()
 
-  const [selectedItem, setSelectedItem] = useState(product.items[0])
-
-  const form = useForm<ItemForm>({
+  const form = useForm<ItemFormSchema>({
     defaultValues: { variant: { ...selectedItem?.variant }, quantity: 1 },
     resolver: zodResolver(itemFormSchema),
   })

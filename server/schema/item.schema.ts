@@ -10,7 +10,8 @@ const variantSchema = z.record(
 export const createItemSchema = z.object({
   sku: z.string(),
   price: z.number().int().nonnegative(),
-  imageUrls: z.array(z.string()),
+  imageUrl: z.string(),
+  galleryUrls: z.array(z.string()),
   variant: variantSchema,
 })
 

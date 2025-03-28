@@ -13,11 +13,12 @@ type Spec {
 }
 
 model Item {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  sku       String   @unique
-  price     Int
-  imageUrls String[]
-  variant   Json
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  sku         String   @unique
+  price       Int
+  imageUrl    String
+  galleryUrls String[]
+  variant     Json
 
   productId String  @db.ObjectId
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
