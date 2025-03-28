@@ -30,7 +30,7 @@ export const createProductSchema = z.object({
   category: z.string(),
   description: z.string(),
   price: z.number().int().nonnegative(),
-  imageUrl: z.string().optional(),
+  imageUrl: z.string(),
   specs: specsSchema.optional(),
   variantFields: variantFieldsSchema.optional(),
   items: z.array(createItemSchema),

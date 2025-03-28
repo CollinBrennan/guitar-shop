@@ -30,7 +30,7 @@ function RouteComponent() {
 
   return (
     <PageContainer backButton={{ label: 'Continue shopping', to: '/shop' }}>
-      <div className="flex flex-col md:flex-row gap-12">
+      <div className="flex flex-col sm:flex-row gap-12">
         <div className="grid reverse grid-cols-2 w-full gap-2">
           <div className="bg-muted-bg w-full aspect-square">0</div>
           {[1, 2, 3].map((numba) => (
@@ -42,7 +42,7 @@ function RouteComponent() {
             </div>
           ))}
         </div>
-        <div className="max-w-192">
+        <div className="w-full max-w-160">
           <div className="flex flex-col gap-8">
             <h1 className="font-display-l uppercase text-5xl break-words">
               {product.name}

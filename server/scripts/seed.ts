@@ -13,6 +13,7 @@ async function seed() {
       {
         sku: 'GTRSTAND',
         price: 2000,
+        imageUrls: ['https://i.imgur.com/cEcruBa.png'],
         variant: {},
       },
     ],
@@ -78,6 +79,7 @@ async function seed() {
       {
         sku: 'GPK-M-BLK-12',
         price: 1000,
+        imageUrls: ['https://i.imgur.com/R95SNr9.png'],
         variant: {
           color: 'black',
           thickness: 'medium',
@@ -87,6 +89,7 @@ async function seed() {
       {
         sku: 'GPK-M-BLK-24',
         price: 1800,
+        imageUrls: [],
         variant: {
           color: 'black',
           thickness: 'medium',
@@ -96,6 +99,7 @@ async function seed() {
       {
         sku: 'GPK-H-BLK-12',
         price: 1000,
+        imageUrls: [],
         variant: {
           color: 'black',
           thickness: 'heavy',
@@ -105,6 +109,7 @@ async function seed() {
       {
         sku: 'GPK-H-BLK-24',
         price: 1800,
+        imageUrls: [],
         variant: {
           color: 'black',
           thickness: 'heavy',
@@ -114,6 +119,10 @@ async function seed() {
       {
         sku: 'GPK-H-WHT-12',
         price: 1000,
+        imageUrls: [
+          'https://i.imgur.com/kZEBNbI.png',
+          'https://i.imgur.com/O7Pr3ZH.png',
+        ],
         variant: {
           color: 'white',
           thickness: 'heavy',
@@ -123,6 +132,7 @@ async function seed() {
       {
         sku: 'GPK-H-WHT-24',
         price: 1800,
+        imageUrls: ['https://i.imgur.com/Mo5aaTe.png'],
         variant: {
           color: 'white',
           thickness: 'heavy',
@@ -168,6 +178,7 @@ async function seed() {
       {
         sku: 'ICBL-BLK',
         price: 1500,
+        imageUrls: [],
         variant: {
           color: 'black',
         },
@@ -175,6 +186,7 @@ async function seed() {
       {
         sku: 'ICBL-WHT',
         price: 1500,
+        imageUrls: [],
         variant: {
           color: 'white',
         },
