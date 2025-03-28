@@ -59,7 +59,7 @@ export function lineItemsFromCart(
             item.customChoices
           ),
           name: data.name,
-          images: data.imageUrl ? [data.imageUrl] : [],
+          images: [data.imageUrl],
         },
       },
       adjustable_quantity: {

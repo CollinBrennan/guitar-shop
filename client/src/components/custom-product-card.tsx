@@ -11,7 +11,7 @@ export default function CustomProductCard({ product }: Props) {
     <Link to="/custom/$slug" params={{ slug: product.slug }}>
       <div className="bg-muted-bg w-full aspect-square">
         <img
-          src={product.imageUrl || ''}
+          src={product.imageUrl}
           alt={product.name}
           className="w-full aspect-square object-contain p-8"
         />

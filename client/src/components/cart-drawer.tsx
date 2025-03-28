@@ -227,7 +227,13 @@ function CustomItemComponent({
 }: CustomItemComponentProps) {
   return (
     <div key={item.sku} className="flex gap-4">
-      <div className="bg-muted-bg size-20 aspect-square" />
+      <div className="bg-muted-bg size-20 aspect-square">
+        <img
+          src={item.imageUrl}
+          alt={item.name}
+          className="w-full aspect-square object-contain"
+        />
+      </div>
       <div className="flex flex-col w-full gap-2">
         <h2 className="font-display uppercase font-bold leading-4">
           {item.name}
