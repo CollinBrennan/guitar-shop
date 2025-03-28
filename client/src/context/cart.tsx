@@ -26,13 +26,16 @@ const CartContext = createContext<
 function createCartContext() {
   const localCartItems = localStorage.getItem('cartItems')
   const defaultValues = localCartItems
-    ? JSON.parse(localCartItems)
+    ? (JSON.parse(localCartItems) as Cart)
     : { items: [], customItems: [] }
 
   const form = useForm<Cart>({ defaultValues })
 
   const { data } = useQuery(
-    trpc.item.listWithProductFromCart.queryOptions(defaultValues)
+    trpc.item.listWithProductFromCart.queryOptions(defaultValues, {
+      enabled:
+        defaultValues.customItems.length > 0 || defaultValues.items.length > 0,
+    })
   )
   const itemData = useRef<ItemWithProductRecord>({})
   const customProductData = useRef<CustomProductRecord>({})
@@ -48,8 +51,6 @@ function createCartContext() {
   })
 
   const cartItems = form.watch()
-
-  console.log(cartItems)
 
   useEffect(() => {
     itemData.current = { ...itemData.current, ...data?.itemData }
