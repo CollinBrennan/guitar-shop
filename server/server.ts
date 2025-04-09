@@ -10,6 +10,7 @@ import productRouter from './routes/product.route.ts'
 import customProductRouter from './routes/custom-product.route.ts'
 import checkoutRouter from './routes/checkout.route.ts'
 import itemRouter from './routes/item.route.ts'
+import sessionRouter from './routes/session.route.ts'
 
 const app = express()
 
@@ -23,6 +24,7 @@ const appRouter = router({
   product: productRouter,
   customProduct: customProductRouter,
   checkout: checkoutRouter,
+  session: sessionRouter,
 })
 
 export type AppRouter = typeof appRouter
@@ -33,7 +35,7 @@ app.use(cors(corsOptions))
 app.use(express.json())
 
 // routes
-app.use('/auth/*', ExpressAuth(authConfig))
+app.use('/api/auth/*', ExpressAuth(authConfig))
 app.use(
   '/api',
   createExpressMiddleware({

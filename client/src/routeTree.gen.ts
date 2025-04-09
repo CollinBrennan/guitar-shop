@@ -11,10 +11,10 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as SigninImport } from './routes/signin'
 import { Route as ShopImport } from './routes/shop'
 import { Route as GuitarsImport } from './routes/guitars'
 import { Route as CheckoutImport } from './routes/checkout'
+import { Route as AccountImport } from './routes/account'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProductSlugImport } from './routes/product.$slug'
@@ -22,12 +22,6 @@ import { Route as DesignSlugImport } from './routes/design.$slug'
 import { Route as CustomSlugImport } from './routes/custom.$slug'
 
 // Create/Update Routes
-
-const SigninRoute = SigninImport.update({
-  id: '/signin',
-  path: '/signin',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const ShopRoute = ShopImport.update({
   id: '/shop',
@@ -44,6 +38,12 @@ const GuitarsRoute = GuitarsImport.update({
 const CheckoutRoute = CheckoutImport.update({
   id: '/checkout',
   path: '/checkout',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AccountRoute = AccountImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -95,6 +95,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountImport
+      parentRoute: typeof rootRoute
+    }
     '/checkout': {
       id: '/checkout'
       path: '/checkout'
@@ -114,13 +121,6 @@ declare module '@tanstack/react-router' {
       path: '/shop'
       fullPath: '/shop'
       preLoaderRoute: typeof ShopImport
-      parentRoute: typeof rootRoute
-    }
-    '/signin': {
-      id: '/signin'
-      path: '/signin'
-      fullPath: '/signin'
-      preLoaderRoute: typeof SigninImport
       parentRoute: typeof rootRoute
     }
     '/custom/$slug': {
@@ -152,10 +152,10 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/account': typeof AccountRoute
   '/checkout': typeof CheckoutRoute
   '/guitars': typeof GuitarsRoute
   '/shop': typeof ShopRoute
-  '/signin': typeof SigninRoute
   '/custom/$slug': typeof CustomSlugRoute
   '/design/$slug': typeof DesignSlugRoute
   '/product/$slug': typeof ProductSlugRoute
@@ -164,10 +164,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/account': typeof AccountRoute
   '/checkout': typeof CheckoutRoute
   '/guitars': typeof GuitarsRoute
   '/shop': typeof ShopRoute
-  '/signin': typeof SigninRoute
   '/custom/$slug': typeof CustomSlugRoute
   '/design/$slug': typeof DesignSlugRoute
   '/product/$slug': typeof ProductSlugRoute
@@ -177,10 +177,10 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/account': typeof AccountRoute
   '/checkout': typeof CheckoutRoute
   '/guitars': typeof GuitarsRoute
   '/shop': typeof ShopRoute
-  '/signin': typeof SigninRoute
   '/custom/$slug': typeof CustomSlugRoute
   '/design/$slug': typeof DesignSlugRoute
   '/product/$slug': typeof ProductSlugRoute
@@ -191,10 +191,10 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/account'
     | '/checkout'
     | '/guitars'
     | '/shop'
-    | '/signin'
     | '/custom/$slug'
     | '/design/$slug'
     | '/product/$slug'
@@ -202,10 +202,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/account'
     | '/checkout'
     | '/guitars'
     | '/shop'
-    | '/signin'
     | '/custom/$slug'
     | '/design/$slug'
     | '/product/$slug'
@@ -213,10 +213,10 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/account'
     | '/checkout'
     | '/guitars'
     | '/shop'
-    | '/signin'
     | '/custom/$slug'
     | '/design/$slug'
     | '/product/$slug'
@@ -226,10 +226,10 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AccountRoute: typeof AccountRoute
   CheckoutRoute: typeof CheckoutRoute
   GuitarsRoute: typeof GuitarsRoute
   ShopRoute: typeof ShopRoute
-  SigninRoute: typeof SigninRoute
   CustomSlugRoute: typeof CustomSlugRoute
   DesignSlugRoute: typeof DesignSlugRoute
   ProductSlugRoute: typeof ProductSlugRoute
@@ -238,10 +238,10 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AccountRoute: AccountRoute,
   CheckoutRoute: CheckoutRoute,
   GuitarsRoute: GuitarsRoute,
   ShopRoute: ShopRoute,
-  SigninRoute: SigninRoute,
   CustomSlugRoute: CustomSlugRoute,
   DesignSlugRoute: DesignSlugRoute,
   ProductSlugRoute: ProductSlugRoute,
@@ -259,10 +259,10 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
+        "/account",
         "/checkout",
         "/guitars",
         "/shop",
-        "/signin",
         "/custom/$slug",
         "/design/$slug",
         "/product/$slug"
@@ -274,6 +274,9 @@ export const routeTree = rootRoute
     "/about": {
       "filePath": "about.tsx"
     },
+    "/account": {
+      "filePath": "account.tsx"
+    },
     "/checkout": {
       "filePath": "checkout.tsx"
     },
@@ -282,9 +285,6 @@ export const routeTree = rootRoute
     },
     "/shop": {
       "filePath": "shop.tsx"
-    },
-    "/signin": {
-      "filePath": "signin.tsx"
     },
     "/custom/$slug": {
       "filePath": "custom.$slug.tsx"

@@ -26,7 +26,7 @@ export default function Navbar() {
         ))}
       </nav>
       <div className="flex justify-end items-center gap-4 w-full">
-        <Link to="/signin">
+        <Link to="/account">
           <UserCircle size={24} />
         </Link>
         <CartDrawer />
